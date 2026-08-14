@@ -1,5 +1,6 @@
-import { createServer } from "node:http";
-import next from "next";
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { createServer } = require("node:http");
+const next = require("next");
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
