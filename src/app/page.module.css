@@ -1,0 +1,10 @@
+.page {
+  position: relative;
+  background: transparent;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  background: #111111;
+}

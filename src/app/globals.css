@@ -1,0 +1,242 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Aspekta Variable";
+  src: url("/fonts/AspektaVF.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --color-ink: #111111;
+  --color-paper: #ffffff;
+  --font-aspekta: "Aspekta Variable", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-ink);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-aspekta);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.type-heading-h1-medium {
+  font-size: 48px;
+  font-weight: 450;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.type-heading-h4-medium {
+  font-size: 24px;
+  font-weight: 450;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.type-heading-h2-medium {
+  font-size: 40px;
+  font-weight: 450;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.type-body-regular {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.type-body-medium-regular {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.type-button-semibold {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.button-swoosh {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: transform 450ms
+    linear(
+      0,
+      0.5737 7.6%,
+      0.8382 11.87%,
+      0.9463 14.19%,
+      1.0292 16.54%,
+      1.0886 18.97%,
+      1.1258 21.53%,
+      1.1424 24.48%,
+      1.1366 27.86%,
+      1.0507 38.62%,
+      0.9995 46.99%,
+      0.9842 58.77%,
+      1.0011 81.26%,
+      1
+    );
+}
+
+.button-swoosh__bg {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: clip;
+  border: 0;
+  border-radius: inherit;
+  background: var(--button-base-color);
+}
+
+.button-swoosh__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  overflow: clip;
+  padding: 16px 20px;
+  border: 0;
+  border-radius: inherit;
+}
+
+.button-swoosh__text,
+.button-swoosh__inner::after {
+  display: block;
+  grid-area: 1 / 1;
+  transition:
+    translate 750ms
+      linear(
+        0,
+        0.5737 7.6%,
+        0.8382 11.87%,
+        0.9463 14.19%,
+        1.0292 16.54%,
+        1.0886 18.97%,
+        1.1258 21.53%,
+        1.1424 24.48%,
+        1.1366 27.86%,
+        1.0507 38.62%,
+        0.9995 46.99%,
+        0.9842 58.77%,
+        1.0011 81.26%,
+        1
+      ),
+    rotate 500ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 200ms ease-out;
+}
+
+.button-swoosh__text {
+  transform-origin: 0 0;
+}
+
+.button-swoosh__inner::after {
+  color: inherit;
+  content: attr(data-text);
+  opacity: 0;
+  transform-origin: top right;
+  rotate: -30deg;
+  translate: 0 2em;
+}
+
+.button-swoosh:hover .button-swoosh__text,
+.button-swoosh:focus-visible .button-swoosh__text {
+  opacity: 0;
+  rotate: -60deg;
+  translate: 0 -2em;
+}
+
+.button-swoosh:hover .button-swoosh__inner::after,
+.button-swoosh:focus-visible .button-swoosh__inner::after {
+  opacity: 1;
+  rotate: 0deg;
+  translate: 0 0;
+  transition-delay: 100ms;
+}
+
+.button-swoosh:focus-visible {
+  outline: none !important;
+}
+
+.button-swoosh:focus-visible .button-swoosh__inner::after {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .type-heading-h1-medium {
+    font-size: clamp(40px, 6vw, 48px);
+  }
+
+  .type-heading-h2-medium {
+    font-size: clamp(34px, 5vw, 40px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-swoosh,
+  .button-swoosh__bg,
+  .button-swoosh__text,
+  .button-swoosh__inner::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .type-heading-h1-medium {
+    font-size: clamp(36px, 11vw, 44px);
+  }
+
+  .type-heading-h2-medium {
+    font-size: clamp(30px, 9vw, 36px);
+  }
+
+  .type-body-medium-regular {
+    font-size: 15px;
+  }
+}

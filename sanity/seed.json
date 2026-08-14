@@ -1,0 +1,153 @@
+{
+  "_id": "siteSettings",
+  "_type": "siteSettings",
+  "hero": {
+    "_type": "object",
+    "headline": "Making the internet slightly less annoying.",
+    "intro": "Designing for the web, building when needed, and using AI to move faster without letting it make the creative decisions.",
+    "ctaLabel": "Start project"
+  },
+  "about": {
+    "_type": "object",
+    "eyebrow": "Why me",
+    "heading": "5+ years in, I’m faster at finding what matters, better at knowing what doesn’t, and still annoyingly picky about the details people actually notice."
+  },
+  "projectsHeading": "A selection\nof things I’ve made",
+  "projects": [
+    {
+      "_key": "nowhealth",
+      "_type": "object",
+      "title": "NowHealth — Brand and launch website for performance-focused health lab",
+      "slug": {"_type": "slug", "current": "nowhealth"},
+      "tags": ["Web design", "Web design", "Web design"],
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "autoplayDuration": 42
+    },
+    {
+      "_key": "jinihome",
+      "_type": "object",
+      "title": "JiniHome — Brand and launch website for performance-focused health lab",
+      "slug": {"_type": "slug", "current": "jinihome"},
+      "tags": ["Web design", "Web design", "Web design"],
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "autoplayDuration": 46
+    },
+    {
+      "_key": "food-srm",
+      "_type": "object",
+      "title": "Food (SRM) — Brand and launch website for performance-focused health lab",
+      "slug": {"_type": "slug", "current": "food-srm"},
+      "tags": ["Web design", "Web design", "Web design"],
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "autoplayDuration": 44
+    },
+    {
+      "_key": "nowhealth-two",
+      "_type": "object",
+      "title": "NowHealth — Brand and launch website for performance-focused health lab",
+      "slug": {"_type": "slug", "current": "nowhealth-two"},
+      "tags": ["Web design", "Web design", "Web design"],
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "autoplayDuration": 48
+    },
+    {
+      "_key": "nowhealth-three",
+      "_type": "object",
+      "title": "NowHealth — Brand and launch website for performance-focused health lab",
+      "slug": {"_type": "slug", "current": "nowhealth-three"},
+      "tags": ["Web design", "Web design", "Web design"],
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "autoplayDuration": 50
+    }
+  ],
+  "servicesSection": {
+    "_type": "object",
+    "heading": "The stuff I do best",
+    "intro": "Mostly websites. Sometimes apps, decks, and whatever else needs better taste and fewer unnecessary clicks.",
+    "items": [
+      {
+        "_key": "website-design",
+        "_type": "object",
+        "id": {"_type": "slug", "current": "website-design"},
+        "title": "Website Design",
+        "description": "I design responsive websites from landing pages to full marketing sites, with a strong focus on layout, visual direction, interactions, and usability.",
+        "tags": ["Web design", "UI design", "Responsive design"]
+      },
+      {
+        "_key": "design-engineering",
+        "_type": "object",
+        "id": {"_type": "slug", "current": "design-engineering"},
+        "title": "Design Engineering",
+        "description": "I take designs further with interactive prototypes, motion, and AI-assisted workflows, so ideas can be tested and refined before they reach development.",
+        "tags": ["Prototyping", "Interaction", "AI workflow"]
+      },
+      {
+        "_key": "mobile-app-design",
+        "_type": "object",
+        "id": {"_type": "slug", "current": "mobile-app-design"},
+        "title": "Mobile App Design",
+        "description": "I design mobile interfaces and user flows that are easy to understand, visually polished, and consistent across the full experience.",
+        "tags": ["App design", "UI/UX", "Prototyping"]
+      },
+      {
+        "_key": "pitch-deck-design",
+        "_type": "object",
+        "id": {"_type": "slug", "current": "pitch-deck-design"},
+        "title": "Pitch Deck Design",
+        "description": "I turn raw content into clear, well-structured presentations with strong hierarchy, visual storytelling, and slides that are actually easy to follow.",
+        "tags": ["Pitch deck", "Presentation", "Visual design"]
+      },
+      {
+        "_key": "brand-collateral-design",
+        "_type": "object",
+        "id": {"_type": "slug", "current": "brand-collateral-design"},
+        "title": "Brand Collateral Design",
+        "description": "I design business cards, banners, booklets, leaflets, and other print materials, keeping everything consistent with the existing brand and ready for production.",
+        "tags": ["Print design", "Brand collateral", "Marketing materials"]
+      }
+    ]
+  },
+  "testimonialsSection": {
+    "_type": "object",
+    "heading": "Nice things people said",
+    "items": [
+      {"_key": "testimonial-1", "_type": "object", "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.", "author": "Nothing Rahman", "role": "Product Manager, SaaS Platform", "company": "Cosmos"},
+      {"_key": "testimonial-2", "_type": "object", "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.", "author": "Nothing Rahman", "role": "Product Manager, SaaS Platform", "company": "Cosmos"},
+      {"_key": "testimonial-3", "_type": "object", "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.", "author": "Nothing Rahman", "role": "Product Manager, SaaS Platform", "company": "Cosmos"},
+      {"_key": "testimonial-4", "_type": "object", "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.", "author": "Nothing Rahman", "role": "Product Manager, SaaS Platform", "company": "Cosmos"},
+      {"_key": "testimonial-5", "_type": "object", "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.", "author": "Nothing Rahman", "role": "Product Manager, SaaS Platform", "company": "Cosmos"}
+    ]
+  },
+  "faqSection": {
+    "_type": "object",
+    "heading": "Before we get into it",
+    "items": [
+      {"_key": "faq-1", "_type": "object", "question": "What kind of projects are you best at?", "answer": "Visual-heavy websites are where I do my best work. I also take on mobile UI, pitch decks, brand collateral, and design-engineering work when the project needs more than static screens."},
+      {"_key": "faq-2", "_type": "object", "question": "Can you work with an existing team or design system?", "answer": "Absolutely. I’m comfortable joining an agency or remote team, picking up an existing system, and getting productive without needing everything explained ten times."},
+      {"_key": "faq-3", "_type": "object", "question": "Do you only design, or do you also prototype and build?", "answer": "I like taking ideas further than Figma. Depending on the project, I’ll prototype interactions, test flows, and push the design closer to something real."},
+      {"_key": "faq-4", "_type": "object", "question": "How do you use AI in your process?", "answer": "AI handles the busywork. I make coffee. Then I put the saved time into visual direction, UX decisions, and the details where taste and judgment actually matter."},
+      {"_key": "faq-5", "_type": "object", "question": "Are you available for freelance, agency, or remote roles?", "answer": "Yes. I’m open to freelance projects, agency collaborations, and remote roles where I can contribute as a visual-first Design Engineer and stay close to both the design and the build."}
+    ]
+  },
+  "footer": {
+    "_type": "object",
+    "availabilityText": "Available for projects",
+    "email": "hey@rahulornob.com",
+    "ctaLabel": "Start conversation",
+    "particleText": "rahulornob",
+    "locationText": "Based in Dhaka & Serve worldwide.",
+    "copyrightText": "Rahulornob © 2026 All Rights Reserved",
+    "sitemap": [
+      {"_key": "home", "_type": "object", "label": "Home", "href": "#top"},
+      {"_key": "about", "_type": "object", "label": "About", "href": "#about"},
+      {"_key": "playground", "_type": "object", "label": "Playground", "href": "#playground"},
+      {"_key": "contact", "_type": "object", "label": "Contact", "href": "#contact"}
+    ],
+    "socialLinks": [
+      {"_key": "linkedin", "_type": "object", "label": "Linkedin"},
+      {"_key": "twitter", "_type": "object", "label": "X (Twitter)"},
+      {"_key": "instagram", "_type": "object", "label": "Instagram"},
+      {"_key": "behance", "_type": "object", "label": "Behance"}
+    ]
+  }
+}

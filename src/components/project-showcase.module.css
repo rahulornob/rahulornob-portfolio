@@ -1,0 +1,336 @@
+.showcase {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 100px 200px;
+  background: #111111;
+  color: #ffffff;
+}
+
+.showcase > h2 {
+  width: 600px;
+  margin: 0;
+  text-align: center;
+}
+
+.projectList {
+  display: flex;
+  width: 1200px;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.project {
+  display: flex;
+  width: 1200px;
+  flex-direction: column;
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(56px);
+  transition:
+    opacity 900ms ease,
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery {
+  position: relative;
+  width: 1200px;
+  height: 600px;
+  overflow: visible;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.gallery[data-dragging="true"] {
+  cursor: grabbing;
+}
+
+.thumbnailTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: max-content;
+  height: 600px;
+  animation: gallery-forward var(--project-duration) linear infinite;
+  will-change: transform;
+}
+
+.thumbnailSet {
+  display: flex;
+  height: 600px;
+  gap: 12px;
+  padding-right: 12px;
+}
+
+.thumbnail {
+  position: relative;
+  width: calc(600px * var(--thumbnail-ratio));
+  height: 600px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.thumbnail img {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.projectInfo {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 100px;
+}
+
+.projectPrimary {
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.projectPrimary h3 {
+  width: 100%;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 44px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    color 260ms ease,
+    background-color 260ms ease,
+    opacity 500ms ease calc(var(--reveal-delay) * 45ms),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1)
+      calc(var(--reveal-delay) * 45ms);
+}
+
+.tag:has([data-revealed="true"]),
+.tag[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project:hover .tag {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.tag:hover {
+  background-color: rgba(255, 255, 255, 0.055);
+  transform: translateY(-2px);
+}
+
+.description {
+  width: 500px;
+  margin: 0;
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.cta {
+  --button-base-color: #ffffff;
+
+  display: inline-flex;
+  min-width: 120px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #111111;
+  white-space: nowrap;
+  transition:
+    color 300ms ease,
+    background-color 300ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta:hover {
+  transform: translateY(-4px);
+}
+
+@keyframes gallery-forward {
+  from {
+    transform: translateX(-12%);
+  }
+
+  to {
+    transform: translateX(-62%);
+  }
+}
+
+@media (max-width: 1400px) {
+  .showcase {
+    padding-inline: 60px;
+  }
+
+  .projectList,
+  .project,
+  .gallery {
+    width: 100%;
+  }
+
+  .projectInfo {
+    padding-inline: 40px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .showcase {
+    padding: 88px 40px;
+  }
+
+  .showcase > h2 {
+    width: min(600px, 100%);
+  }
+
+  .gallery,
+  .thumbnailTrack,
+  .thumbnailSet,
+  .thumbnail {
+    height: 440px;
+  }
+
+  .thumbnail {
+    width: calc(440px * var(--thumbnail-ratio));
+  }
+
+  .projectInfo {
+    gap: 40px;
+    padding-inline: 24px;
+  }
+
+  .projectPrimary,
+  .description {
+    width: 50%;
+    padding: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .showcase {
+    gap: 48px;
+    padding: 72px 20px;
+  }
+
+  .projectList {
+    gap: 64px;
+  }
+
+  .project {
+    gap: 20px;
+  }
+
+  .gallery,
+  .thumbnailTrack,
+  .thumbnailSet,
+  .thumbnail {
+    height: 260px;
+  }
+
+  .thumbnail {
+    width: calc(260px * var(--thumbnail-ratio));
+    border-radius: 12px;
+  }
+
+  .thumbnailSet {
+    gap: 8px;
+    padding-right: 8px;
+  }
+
+  .projectInfo {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0;
+  }
+
+  .projectPrimary,
+  .description {
+    width: 100%;
+  }
+
+  .projectPrimary {
+    gap: 12px;
+  }
+
+  .projectPrimary h3 {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase > h2,
+  .project,
+  .thumbnail img,
+  .tags span,
+  .cta {
+    transition: none;
+  }
+
+  .showcase > h2,
+  .project {
+    opacity: 1;
+    transform: none;
+  }
+
+  .thumbnailTrack {
+    animation: none;
+    transform: translateX(-12%);
+  }
+}

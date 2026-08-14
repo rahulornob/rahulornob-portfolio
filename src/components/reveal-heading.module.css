@@ -1,0 +1,43 @@
+.heading {
+  visibility: visible;
+}
+
+.line {
+  display: block;
+}
+
+.clip {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+  vertical-align: bottom;
+}
+
+.word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(115%);
+  transition:
+    opacity 500ms ease calc(var(--total-index, var(--word-index)) * 45ms),
+    filter 700ms ease calc(var(--total-index, var(--word-index)) * 45ms),
+    transform 850ms cubic-bezier(0.16, 1, 0.3, 1)
+      calc(var(--total-index, var(--word-index)) * 45ms);
+  will-change: opacity, filter, transform;
+}
+
+.heading[data-revealed="true"] .word {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+}
