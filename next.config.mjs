@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    cpus: 1,
+    preloadEntriesOnStart: false,
+    webpackMemoryOptimizations: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -8,6 +13,15 @@ const nextConfig = {
         pathname: "/images/**",
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/studio/:path*",
+        destination: "https://rahulornob-portfolio.sanity.studio/:path*",
+        permanent: false,
+      },
+    ];
   },
 };
 
