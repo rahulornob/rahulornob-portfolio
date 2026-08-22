@@ -19,6 +19,7 @@ export default async function Home() {
         <Hero content={content.hero} />
         <About content={content.about} />
         <ProjectShowcase
+          carouselSpeed={content.projectsCarouselSpeed}
           heading={content.projectsHeading}
           projects={content.projects}
         />

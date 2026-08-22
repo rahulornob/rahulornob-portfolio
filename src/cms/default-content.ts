@@ -13,6 +13,7 @@ export const defaultContent: SiteContent = {
       "5+ years in, I’m faster at finding what matters, better at knowing what doesn’t, and still annoyingly picky about the details people actually notice.",
   },
   projectsHeading: "A selection\nof things I’ve made",
+  projectsCarouselSpeed: 60,
   projects: [
     {
       title:
@@ -21,7 +22,6 @@ export const defaultContent: SiteContent = {
       tags: ["Web design", "Web design", "Web design"],
       description:
         "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
-      autoplayDuration: 42,
       images: [],
     },
   ],

@@ -19,7 +19,6 @@ export type AboutContent = {
 };
 
 export type ProjectContent = {
-  autoplayDuration?: number;
   description?: string;
   images?: CmsImage[];
   slug?: string;
@@ -77,6 +76,7 @@ export type SiteContent = {
   footer?: FooterContent;
   hero?: HeroContent;
   projects?: ProjectContent[];
+  projectsCarouselSpeed?: number;
   projectsHeading?: string;
   servicesSection?: ServicesContent;
   testimonialsSection?: TestimonialsContent;

@@ -18,7 +18,6 @@ type Thumbnail = {
 
 type Project = {
   description: string;
-  duration: number;
   slug: string;
   tags: string[];
   thumbnails: Thumbnail[];
@@ -42,7 +41,6 @@ const fallbackProjects: Project[] = [
     tags: ["Web design", "Web design", "Web design"],
     description: sharedDescription,
     thumbnails: placeholderThumbnails("NowHealth"),
-    duration: 42,
   },
   {
     title:
@@ -51,7 +49,6 @@ const fallbackProjects: Project[] = [
     tags: ["Web design", "Web design", "Web design"],
     description: sharedDescription,
     thumbnails: placeholderThumbnails("JiniHome"),
-    duration: 46,
   },
   {
     title:
@@ -60,7 +57,6 @@ const fallbackProjects: Project[] = [
     tags: ["Web design", "Web design", "Web design"],
     description: sharedDescription,
     thumbnails: placeholderThumbnails("Food SRM"),
-    duration: 44,
   },
   {
     title:
@@ -69,7 +65,6 @@ const fallbackProjects: Project[] = [
     tags: ["Web design", "Web design", "Web design"],
     description: sharedDescription,
     thumbnails: placeholderThumbnails("NowHealth"),
-    duration: 48,
   },
   {
     title:
@@ -78,7 +73,6 @@ const fallbackProjects: Project[] = [
     tags: ["Web design", "Web design", "Web design"],
     description: sharedDescription,
     thumbnails: placeholderThumbnails("NowHealth"),
-    duration: 50,
   },
 ];
 
@@ -128,14 +122,14 @@ function ThumbnailSet({
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   const dragRef = useRef({
     active: false,
     startTime: 0,
     startX: 0,
   });
   const motionStyle = {
-    "--project-duration": `${project.duration / 0.6}s`,
+    "--project-duration": `${42 / (speed / 100)}s`,
   } as CSSProperties;
 
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
@@ -245,9 +239,11 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export function ProjectShowcase({
+  carouselSpeed = 60,
   heading,
   projects: cmsProjects,
 }: {
+  carouselSpeed?: number;
   heading?: string;
   projects?: ProjectContent[];
 }) {
@@ -274,10 +270,10 @@ export function ProjectShowcase({
         thumbnails: cmsThumbnails?.length
           ? cmsThumbnails
           : placeholderThumbnails(title),
-        duration: project.autoplayDuration ?? 42,
       };
     });
   const projects = cmsProjectItems?.length ? cmsProjectItems : fallbackProjects;
+  const normalizedSpeed = Math.min(100, Math.max(20, carouselSpeed));
   const headingLines = heading?.trim()
     ? heading.split("\n")
     : ["A selection", "of things I’ve made"];
@@ -336,7 +332,7 @@ export function ProjectShowcase({
 
       <div className={styles.projectList}>
         {projects.map((project) => (
-          <ProjectCard project={project} key={project.slug} />
+          <ProjectCard project={project} speed={normalizedSpeed} key={project.slug} />
         ))}
       </div>
 

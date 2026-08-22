@@ -615,6 +615,7 @@ export function AdminEditor({
   const testimonials = content.testimonialsSection || {};
   const faq = content.faqSection || {};
   const footer = content.footer || {};
+  const projectCarouselSpeed = Math.min(100, Math.max(20, content.projectsCarouselSpeed ?? 60));
   const activeLabel = sections.find(([id]) => id === active)?.[1] || "Content";
   const saveStatus = !editingEnabled
     ? "Production preview"
@@ -685,6 +686,23 @@ export function AdminEditor({
           {active === "projects" ? (
             <SectionPanel title="Projects" description="Manage project copy, tags, gallery order, and carousel speed.">
               <Field label="Section heading" hint="Use a new line to control the heading break."><TextInput multiline value={content.projectsHeading} onChange={(projectsHeading) => setContent((current) => ({ ...current, projectsHeading }))} /></Field>
+              <div className={styles.speedSlider}>
+                <div className={styles.speedSliderHeader}>
+                  <div><span>Project carousel speed</span><small>Controls every project carousel.</small></div>
+                  <output>{projectCarouselSpeed}%</output>
+                </div>
+                <input
+                  type="range"
+                  min="20"
+                  max="100"
+                  step="5"
+                  value={projectCarouselSpeed}
+                  style={{ "--slider-progress": `${((projectCarouselSpeed - 20) / 80) * 100}%` } as CSSProperties}
+                  aria-label="Project carousel speed"
+                  onChange={(event) => setContent((current) => ({ ...current, projectsCarouselSpeed: Number(event.target.value) }))}
+                />
+                <div className={styles.speedSliderScale}><span>Slower</span><span>Faster</span></div>
+              </div>
               <SortableList
                 ids={(content.projects || []).map((_, index) => `project-${index}`)}
                 onMove={(from, to) => {
@@ -710,16 +728,13 @@ export function AdminEditor({
                     <Field label="Slug"><TextInput value={project.slug} onChange={(slug) => { const next = [...(content.projects || [])]; next[index] = { ...project, slug }; setProjects(next); }} /></Field>
                   </div>
                   <Field label="Description"><TextInput multiline value={project.description} onChange={(description) => { const next = [...(content.projects || [])]; next[index] = { ...project, description }; setProjects(next); }} /></Field>
-                  <div className={styles.twoColumns}>
-                    <Field label="Tags" hint="Separate tags with commas."><TagsInput value={project.tags} onChange={(tags) => { const next = [...(content.projects || [])]; next[index] = { ...project, tags }; setProjects(next); }} /></Field>
-                    <Field label="Carousel duration (seconds)"><input type="number" min="10" max="180" value={project.autoplayDuration || 42} onChange={(event) => { const next = [...(content.projects || [])]; next[index] = { ...project, autoplayDuration: Number(event.target.value) }; setProjects(next); }} /></Field>
-                  </div>
+                  <Field label="Tags" hint="Separate tags with commas."><TagsInput value={project.tags} onChange={(tags) => { const next = [...(content.projects || [])]; next[index] = { ...project, tags }; setProjects(next); }} /></Field>
                   <ImageList images={project.images} onChange={(images) => { const next = [...(content.projects || [])]; next[index] = { ...project, images }; setProjects(next); }} />
                   </> : null}
                   </SortableItemCard>
                 );})}
               </SortableList>
-              <button className={styles.addButton} type="button" onClick={() => { const nextIndex = (content.projects || []).length; setProjects([...(content.projects || []), { title: "New project", slug: `project-${Date.now()}`, description: "", tags: [], autoplayDuration: 42, images: [] }]); setExpandedProjects(new Set([nextIndex])); }}>+ Add project</button>
+              <button className={styles.addButton} type="button" onClick={() => { const nextIndex = (content.projects || []).length; setProjects([...(content.projects || []), { title: "New project", slug: `project-${Date.now()}`, description: "", tags: [], images: [] }]); setExpandedProjects(new Set([nextIndex])); }}>+ Add project</button>
             </SectionPanel>
           ) : null}
 
