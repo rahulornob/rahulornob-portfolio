@@ -173,19 +173,35 @@ function ImageList({
 }
 
 function ItemHeader({
+  expanded,
   index,
   label,
   onMove,
   onRemove,
+  onToggle,
 }: {
+  expanded?: boolean;
   index: number;
   label: string;
   onMove: (direction: -1 | 1) => void;
   onRemove: () => void;
+  onToggle?: () => void;
 }) {
   return (
     <div className={styles.itemHeader}>
-      <h3>{label || `Item ${index + 1}`}</h3>
+      {onToggle ? (
+        <button
+          type="button"
+          className={styles.collapseTrigger}
+          aria-expanded={expanded}
+          onClick={onToggle}
+        >
+          <span>{label || `Item ${index + 1}`}</span>
+          <span aria-hidden="true">{expanded ? "−" : "+"}</span>
+        </button>
+      ) : (
+        <h3>{label || `Item ${index + 1}`}</h3>
+      )}
       <div>
         <button type="button" onClick={() => onMove(-1)} aria-label="Move up">↑</button>
         <button type="button" onClick={() => onMove(1)} aria-label="Move down">↓</button>
@@ -214,12 +230,24 @@ export function AdminEditor({
   const [content, setContent] = useState<SiteContent>(() => structuredClone(initialContent));
   const [publishedSnapshot, setPublishedSnapshot] = useState(() => JSON.stringify(initialContent));
   const [active, setActive] = useState<Section>("hero");
+  const [expandedProjects, setExpandedProjects] = useState<Set<number>>(
+    () => new Set(),
+  );
   const [publishing, setPublishing] = useState(false);
   const [notice, setNotice] = useState("");
   const dirty = useMemo(() => JSON.stringify(content) !== publishedSnapshot, [content, publishedSnapshot]);
 
   function setProjects(projects: ProjectContent[]) {
     setContent((current) => ({ ...current, projects }));
+  }
+
+  function toggleProject(index: number) {
+    setExpandedProjects((current) => {
+      const next = new Set(current);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
   }
 
   function setServices(items: ServiceContent[]) {
@@ -324,9 +352,12 @@ export function AdminEditor({
           {active === "projects" ? (
             <SectionPanel title="Projects" description="Manage project copy, tags, gallery order, and carousel speed.">
               <Field label="Section heading" hint="Use a new line to control the heading break."><TextInput multiline value={content.projectsHeading} onChange={(projectsHeading) => setContent((current) => ({ ...current, projectsHeading }))} /></Field>
-              {(content.projects || []).map((project, index) => (
-                <div className={styles.itemCard} key={`project-${index}`}>
-                  <ItemHeader index={index} label={project.title || "New project"} onMove={(direction) => setProjects(moveItem(content.projects || [], index, direction))} onRemove={() => setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index))} />
+              {(content.projects || []).map((project, index) => {
+                const expanded = expandedProjects.has(index);
+                return (
+                <div className={styles.itemCard} data-collapsed={!expanded} key={`project-${index}`}>
+                  <ItemHeader expanded={expanded} index={index} label={project.title || "New project"} onToggle={() => toggleProject(index)} onMove={(direction) => { setProjects(moveItem(content.projects || [], index, direction)); setExpandedProjects(new Set()); }} onRemove={() => { setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index)); setExpandedProjects(new Set()); }} />
+                  {expanded ? <>
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={project.title} onChange={(title) => { const next = [...(content.projects || [])]; next[index] = { ...project, title }; setProjects(next); }} /></Field>
                     <Field label="Slug"><TextInput value={project.slug} onChange={(slug) => { const next = [...(content.projects || [])]; next[index] = { ...project, slug }; setProjects(next); }} /></Field>
@@ -337,9 +368,10 @@ export function AdminEditor({
                     <Field label="Carousel duration (seconds)"><input type="number" min="10" max="180" value={project.autoplayDuration || 42} onChange={(event) => { const next = [...(content.projects || [])]; next[index] = { ...project, autoplayDuration: Number(event.target.value) }; setProjects(next); }} /></Field>
                   </div>
                   <ImageList images={project.images} onChange={(images) => { const next = [...(content.projects || [])]; next[index] = { ...project, images }; setProjects(next); }} />
+                  </> : null}
                 </div>
-              ))}
-              <button className={styles.addButton} type="button" onClick={() => setProjects([...(content.projects || []), { title: "New project", slug: `project-${Date.now()}`, description: "", tags: [], autoplayDuration: 42, images: [] }])}>+ Add project</button>
+              );})}
+              <button className={styles.addButton} type="button" onClick={() => { const nextIndex = (content.projects || []).length; setProjects([...(content.projects || []), { title: "New project", slug: `project-${Date.now()}`, description: "", tags: [], autoplayDuration: 42, images: [] }]); setExpandedProjects(new Set([nextIndex])); }}>+ Add project</button>
             </SectionPanel>
           ) : null}
 

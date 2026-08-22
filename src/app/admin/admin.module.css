@@ -200,6 +200,32 @@
 .itemHeader h3 { overflow: hidden; margin: 0; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
 .itemHeader > div { display: flex; gap: 5px; flex-shrink: 0; }
 
+.itemCard[data-collapsed="true"] .itemHeader {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.itemHeader .collapseTrigger {
+  min-width: 0;
+  height: auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 7px 4px;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  text-align: left;
+}
+
+.collapseTrigger span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .itemHeader button,
 .imageActions button,
 .linkRow button {
