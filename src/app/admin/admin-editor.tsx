@@ -180,12 +180,16 @@ function SortableImageItem({
   images,
   index,
   onChange,
+  onSelect,
+  selected,
 }: {
   id: string;
   image: CmsImage;
   images: CmsImage[];
   index: number;
   onChange: (images: CmsImage[]) => void;
+  onSelect: () => void;
+  selected: boolean;
 }) {
   const {
     attributes,
@@ -206,10 +210,20 @@ function SortableImageItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className={styles.imageItem} data-dragging={isDragging}>
+    <div ref={setNodeRef} style={style} className={styles.imageItem} data-dragging={isDragging} data-selected={selected}>
       <div className={styles.imagePreview}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={image.url} alt="" draggable={false} />
+        <button
+          type="button"
+          className={styles.imageSelectButton}
+          data-selected={selected}
+          aria-label={`${selected ? "Deselect" : "Select"} image ${index + 1}`}
+          aria-pressed={selected}
+          onClick={onSelect}
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8" /></svg>
+        </button>
         <button
           type="button"
           ref={setActivatorNodeRef}
@@ -253,7 +267,29 @@ function ImageList({
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState("");
+  const [selectedImages, setSelectedImages] = useState<Set<string>>(() => new Set());
   const imageIds = images.map((_, index) => `image-${index}`);
+  const imageKeys = images.map((image, index) => image.url || `image-${index}`);
+  const selectedCount = imageKeys.filter((key) => selectedImages.has(key)).length;
+  const allSelected = images.length > 0 && selectedCount === images.length;
+
+  function toggleSelected(key: string) {
+    setSelectedImages((current) => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function toggleAll() {
+    setSelectedImages(allSelected ? new Set() : new Set(imageKeys));
+  }
+
+  function removeSelected() {
+    onChange(images.filter((_, index) => !selectedImages.has(imageKeys[index]!)));
+    setSelectedImages(new Set());
+  }
 
   async function uploadFiles(files: File[]) {
     if (!files.length) return;
@@ -286,7 +322,18 @@ function ImageList({
 
   return (
     <div className={styles.imageField}>
-      <div className={styles.fieldLabel}>{label}</div>
+      <div className={styles.imageFieldHeader}>
+        <div className={styles.fieldLabel}>{label}</div>
+        {!single && images.length ? (
+          <div className={styles.imageSelectionActions}>
+            <button type="button" className={styles.selectAllButton} data-selected={allSelected} aria-pressed={allSelected} onClick={toggleAll}>
+              <span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8" /></svg></span>
+              {allSelected ? "Clear selection" : "Select all"}
+            </button>
+            {selectedCount ? <button type="button" className={styles.removeSelectedButton} onClick={removeSelected}>Remove selected ({selectedCount})</button> : null}
+          </div>
+        ) : null}
+      </div>
       {images.length ? (
         single ? (
           <div className={styles.imageGrid}>
@@ -321,6 +368,8 @@ function ImageList({
                   index={index}
                   key={`${image.url}-${index}`}
                   onChange={onChange}
+                  onSelect={() => toggleSelected(imageKeys[index]!)}
+                  selected={selectedImages.has(imageKeys[index]!)}
                 />
               ))}
             </div>
