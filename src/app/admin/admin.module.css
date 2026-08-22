@@ -258,15 +258,17 @@
 
 .dashboard {
   min-height: 100svh;
-  display: grid;
-  grid-template-columns: 256px minmax(0, 1fr);
+  display: block;
   background: var(--md-surface-container-low);
 }
 
 .sidebar {
-  position: sticky;
+  position: fixed;
   z-index: 20;
   top: 0;
+  bottom: 0;
+  left: 0;
+  width: 256px;
   height: 100svh;
   display: flex;
   flex-direction: column;
@@ -368,6 +370,8 @@
 
 .editorShell {
   min-width: 0;
+  min-height: 100svh;
+  margin-left: 256px;
   background: var(--md-surface-container-low);
 }
 
@@ -804,13 +808,14 @@
 }
 
 @media (max-width: 1100px) {
-  .dashboard {
-    grid-template-columns: 88px minmax(0, 1fr);
-  }
-
   .sidebar {
+    width: 88px;
     align-items: center;
     padding-inline: 10px;
+  }
+
+  .editorShell {
+    margin-left: 88px;
   }
 
   .sidebarBrand {
@@ -848,12 +853,12 @@
 }
 
 @media (max-width: 820px) {
-  .dashboard {
-    display: block;
-  }
-
   .sidebar {
     display: none;
+  }
+
+  .editorShell {
+    margin-left: 0;
   }
 
   .topbar {
