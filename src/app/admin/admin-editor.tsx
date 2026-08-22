@@ -31,6 +31,24 @@ const sections = [
 
 type Section = (typeof sections)[number][0];
 
+const sectionIconPaths: Record<Section, string[]> = {
+  hero: ["M3 11.5 12 4l9-7 9 7v8a2 2 0 0 1-2 2h-4v-6H8v6H5a2 2 0 0 1-2-2z"],
+  about: ["M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z", "M4 21a8 8 0 0 1 16 0"],
+  projects: ["M4 4h6v6H4z", "M14 4h6v6h-6z", "M4 14h6v6H4z", "M14 14h6v6h-6z"],
+  services: ["m14.7 6.3 3-3 3 3-3 3", "M16 8 8 16", "m6.5 13.5-4-4 3-3 4 4", "m10 14 4 4"],
+  testimonials: ["M5 6h6v6H7l-3 3V7a1 1 0 0 1 1-1Z", "M14 6h5a1 1 0 0 1 1 1v8l-3-3h-3Z"],
+  faq: ["M9.5 9a2.5 2.5 0 1 1 3.2 2.4c-.7.3-.7.8-.7 1.6", "M12 17h.01", "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"],
+  footer: ["M4 5h16", "M4 10h16", "M4 15h10", "M4 20h6"],
+};
+
+function SectionIcon({ id }: { id: Section }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      {sectionIconPaths[id].map((path) => <path d={path} key={path} />)}
+    </svg>
+  );
+}
+
 function Field({
   children,
   hint,
@@ -105,10 +123,10 @@ function ImageList({
   single?: boolean;
 }) {
   const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState("");
 
-  async function upload(event: ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files || []);
+  async function uploadFiles(files: File[]) {
     if (!files.length) return;
     setUploading(true);
     setError("");
@@ -129,8 +147,12 @@ function ImageList({
       setError(uploadError instanceof Error ? uploadError.message : "Upload failed.");
     } finally {
       setUploading(false);
-      event.target.value = "";
     }
+  }
+
+  async function upload(event: ChangeEvent<HTMLInputElement>) {
+    await uploadFiles(Array.from(event.target.files || []));
+    event.target.value = "";
   }
 
   function move(index: number, direction: -1 | 1) {
@@ -170,9 +192,30 @@ function ImageList({
         </div>
       ) : null}
       {(!single || !images.length) ? (
-        <label className={styles.uploadButton}>
+        <label
+          className={styles.uploadButton}
+          data-drag-active={dragActive}
+          onDragEnter={(event) => {
+            event.preventDefault();
+            setDragActive(true);
+          }}
+          onDragOver={(event) => event.preventDefault()}
+          onDragLeave={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+              setDragActive(false);
+            }
+          }}
+          onDrop={(event) => {
+            event.preventDefault();
+            setDragActive(false);
+            void uploadFiles(Array.from(event.dataTransfer.files));
+          }}
+        >
           <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" multiple={!single} onChange={upload} disabled={uploading} />
-          {uploading ? "Uploading…" : `+ Upload ${single ? "image" : "images"}`}
+          <span>
+            <strong>{uploading ? "Uploading…" : `Upload ${single ? "image" : "images"}`}</strong>
+            <small>{dragActive ? "Drop to upload" : "Choose files or drag them here"}</small>
+          </span>
         </label>
       ) : null}
       {error ? <p className={styles.formError}>{error}</p> : null}
@@ -231,7 +274,17 @@ function ItemHeader({
             <circle cx="9" cy="15" r="1.25" />
           </svg>
         </button>
-        <button type="button" className={styles.dangerButton} onClick={onRemove}>Remove</button>
+        <button
+          type="button"
+          className={styles.dangerButton}
+          onClick={onRemove}
+          aria-label={`Remove ${label || `item ${index + 1}`}`}
+          title="Remove"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5" />
+          </svg>
+        </button>
       </div>
     </div>
   );
@@ -361,6 +414,10 @@ export function AdminEditor({
   const testimonials = content.testimonialsSection || {};
   const faq = content.faqSection || {};
   const footer = content.footer || {};
+  const activeLabel = sections.find(([id]) => id === active)?.[1] || "Content";
+  const saveStatus = !editingEnabled
+    ? "Production preview"
+    : notice || (dirty ? "Waiting to autosave" : "All changes saved");
 
   return (
     <main className={styles.dashboard} data-read-only={!editingEnabled}>
@@ -369,9 +426,12 @@ export function AdminEditor({
           <div className={styles.brandMark}>R</div>
           <div><strong>Portfolio CMS</strong><span>rahulornob.com</span></div>
         </div>
-        <nav>
+        <nav aria-label="Content sections">
           {sections.map(([id, label]) => (
-            <button key={id} type="button" className={active === id ? styles.activeNav : ""} onClick={() => setActive(id)}>{label}</button>
+            <button key={id} type="button" className={active === id ? styles.activeNav : ""} onClick={() => setActive(id)}>
+              <span className={styles.navIcon}><SectionIcon id={id} /></span>
+              <span>{label}</span>
+            </button>
           ))}
         </nav>
         <div className={styles.sidebarFooter}>
@@ -382,23 +442,26 @@ export function AdminEditor({
 
       <section className={styles.editorShell}>
         <header className={styles.topbar}>
-          <div>
-            <span className={`${styles.statusDot} ${dirty ? styles.statusUnsaved : ""}`} />
-            {!editingEnabled
-              ? "Production preview — edit locally"
-              : dirty
-                ? "Unsaved changes"
-                : "Everything published"}
+          <div className={styles.topbarContext}>
+            <span className={styles.activeSectionIcon}><SectionIcon id={active} /></span>
+            <div>
+              <span>Website content</span>
+              <strong>{activeLabel}</strong>
+            </div>
           </div>
           <div className={styles.topbarActions}>
-            {notice ? <span>{notice}</span> : null}
+            <div className={styles.saveState} role="status" aria-live="polite">
+              <span className={`${styles.statusDot} ${dirty ? styles.statusUnsaved : ""}`} />
+              <span>{saveStatus}</span>
+            </div>
+            <a className={styles.secondaryButton} href="/" target="_blank">Preview</a>
             <button className={styles.primaryButton} type="button" onClick={publish} disabled={!editingEnabled || !dirty || publishing}>{publishing ? "Saving…" : editingEnabled ? "Save locally" : "Local editing only"}</button>
           </div>
         </header>
 
         <div className={styles.editor}>
           <div className={styles.mobileTabs}>
-            {sections.map(([id, label]) => <button key={id} type="button" className={active === id ? styles.activeTab : ""} onClick={() => setActive(id)}>{label}</button>)}
+            {sections.map(([id, label]) => <button key={id} type="button" className={active === id ? styles.activeTab : ""} onClick={() => setActive(id)}><SectionIcon id={id} /><span>{label}</span></button>)}
           </div>
 
           {active === "hero" ? (
