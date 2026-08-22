@@ -912,6 +912,7 @@
   border-radius: 16px;
   background: var(--md-surface-container-lowest);
   box-shadow: 0 1px 2px rgba(29, 27, 32, .04);
+  cursor: grab;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
@@ -923,6 +924,7 @@
   opacity: .78;
   border-color: var(--md-primary);
   box-shadow: 0 14px 32px rgba(29, 27, 32, .18);
+  cursor: grabbing;
 }
 
 .imageItem[data-selected="true"] {
@@ -949,6 +951,7 @@
   border-radius: 10px;
   padding: 7px 10px;
   font-size: 11px;
+  cursor: text;
 }
 
 .imageSelectButton,
@@ -999,8 +1002,7 @@
   right: 10px;
   border: 1px solid rgba(255, 255, 255, .72);
   background: var(--md-primary);
-  cursor: grab;
-  touch-action: none;
+  pointer-events: none;
 }
 
 .adminRoot .imageDragHandle {
@@ -1014,10 +1016,6 @@
     0 0 0 3px rgba(101, 85, 143, .2),
     0 5px 16px rgba(29, 27, 32, .24);
   transform: scale(1.04);
-}
-
-.imageDragHandle:active {
-  cursor: grabbing;
 }
 
 .imageDragHandle svg {

@@ -195,7 +195,6 @@ function SortableImageItem({
     attributes,
     isDragging,
     listeners,
-    setActivatorNodeRef,
     setNodeRef,
     transform,
     transition,
@@ -210,7 +209,20 @@ function SortableImageItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className={styles.imageItem} data-dragging={isDragging} data-selected={selected}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={styles.imageItem}
+      data-dragging={isDragging}
+      data-selected={selected}
+      aria-label={`Drag image ${index + 1} to reorder`}
+      {...attributes}
+      {...listeners}
+      onPointerDown={(event) => {
+        listeners?.onPointerDown?.(event);
+        event.stopPropagation();
+      }}
+    >
       <div className={styles.imagePreview}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={image.url} alt="" draggable={false} />
@@ -224,17 +236,9 @@ function SortableImageItem({
         >
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6.5 12.5 3.5 3.5 7.5-8" /></svg>
         </button>
-        <button
-          type="button"
-          ref={setActivatorNodeRef}
-          className={styles.imageDragHandle}
-          aria-label={`Drag image ${index + 1} to reorder`}
-          title="Drag to reorder"
-          {...attributes}
-          {...listeners}
-        >
+        <span className={styles.imageDragHandle} aria-hidden="true">
           <DragDots />
-        </button>
+        </span>
       </div>
       <input
         aria-label="Image alt text"
