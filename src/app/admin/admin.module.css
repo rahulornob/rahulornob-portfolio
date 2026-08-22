@@ -121,6 +121,7 @@
 .loginCard label,
 .field {
   display: grid;
+  align-content: start;
   gap: 8px;
 }
 
@@ -148,6 +149,10 @@
     border-color 160ms ease,
     box-shadow 160ms ease,
     background-color 160ms ease;
+}
+
+.adminRoot input {
+  height: 54px;
 }
 
 .adminRoot input:hover,
@@ -501,6 +506,7 @@
 .twoColumns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 18px;
 }
 
