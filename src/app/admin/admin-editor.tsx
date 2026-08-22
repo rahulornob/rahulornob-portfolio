@@ -4,6 +4,8 @@ import {
   ChangeEvent,
   DragEvent as ReactDragEvent,
   ReactNode,
+  useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -265,7 +267,8 @@ export function AdminEditor({
   } | null>(null);
   const [publishing, setPublishing] = useState(false);
   const [notice, setNotice] = useState("");
-  const dirty = useMemo(() => JSON.stringify(content) !== publishedSnapshot, [content, publishedSnapshot]);
+  const contentSnapshot = useMemo(() => JSON.stringify(content), [content]);
+  const dirty = contentSnapshot !== publishedSnapshot;
 
   function setProjects(projects: ProjectContent[]) {
     setContent((current) => ({ ...current, projects }));
@@ -313,20 +316,37 @@ export function AdminEditor({
     }));
   }
 
-  async function publish() {
+  const saveContent = useCallback(async (
+    snapshot: string,
+    automatic = false,
+  ) => {
     if (!editingEnabled) return;
     setPublishing(true);
-    setNotice("");
+    setNotice(automatic ? "Autosaving…" : "Saving…");
     const response = await fetch("/api/admin/content", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(content),
+      body: snapshot,
     });
     const result = (await response.json()) as { error?: string };
     setPublishing(false);
     if (!response.ok) return setNotice(result.error || "Unable to publish.");
-    setPublishedSnapshot(JSON.stringify(content));
-    setNotice("Published. The website is updated.");
+    setPublishedSnapshot(snapshot);
+    setNotice(automatic ? "Autosaved locally" : "Saved locally");
+  }, [editingEnabled]);
+
+  useEffect(() => {
+    if (!editingEnabled || !dirty) return;
+
+    const timer = window.setTimeout(() => {
+      void saveContent(contentSnapshot, true);
+    }, 900);
+
+    return () => window.clearTimeout(timer);
+  }, [contentSnapshot, dirty, editingEnabled, saveContent]);
+
+  function publish() {
+    void saveContent(contentSnapshot);
   }
 
   async function logout() {
