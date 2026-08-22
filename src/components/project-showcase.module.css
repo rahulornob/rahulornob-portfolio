@@ -38,7 +38,7 @@
 
 .project[data-visible="true"] {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .gallery {
@@ -160,7 +160,7 @@
 .tag:has([data-revealed="true"]),
 .tag[data-revealed="true"] {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .project:hover .tag {

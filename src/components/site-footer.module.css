@@ -49,7 +49,7 @@
 
 .visible .contactRow {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .contactInfo {
@@ -242,7 +242,7 @@
 
 .visible .metaRow {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .location {

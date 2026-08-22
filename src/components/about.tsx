@@ -60,6 +60,7 @@ function LogoSet({
             alt={hidden ? "" : logo.name}
             width={logo.width}
             height={logo.height}
+            quality={95}
           />
         </div>
       ))}

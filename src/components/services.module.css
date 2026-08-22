@@ -39,7 +39,7 @@
 
 .visible .header p {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .list {
@@ -65,7 +65,7 @@
 
 .visible .service {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .service.open {
@@ -187,7 +187,7 @@
 
 .open .copy p {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
   transition-delay: 180ms;
 }
 
@@ -223,7 +223,7 @@
 
 .open .tags span {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .open .tags span:nth-child(1) {
@@ -272,7 +272,7 @@
 
 .open .imagePlaceholder {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
 .open .imagePlaceholder:nth-child(1) {

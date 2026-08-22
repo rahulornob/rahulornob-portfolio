@@ -31,8 +31,9 @@ body {
   background: var(--color-ink);
   color: var(--color-paper);
   font-family: var(--font-aspekta);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 button,

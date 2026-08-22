@@ -92,9 +92,15 @@ function ThumbnailSet({
   return (
     <div className={styles.thumbnailSet} aria-hidden={hidden || undefined}>
       {thumbnails.map((thumbnail, index) => {
+        const ratio = thumbnail.width / thumbnail.height;
         const thumbnailStyle = {
-          "--thumbnail-ratio": thumbnail.width / thumbnail.height,
+          "--thumbnail-ratio": ratio,
         } as CSSProperties;
+        const responsiveSizes = `(max-width: 640px) ${Math.ceil(
+          260 * ratio,
+        )}px, (max-width: 1000px) ${Math.ceil(440 * ratio)}px, ${Math.ceil(
+          600 * ratio,
+        )}px`;
 
         return (
           <div
@@ -108,7 +114,8 @@ function ThumbnailSet({
                 alt={hidden ? "" : thumbnail.alt}
                 width={thumbnail.width}
                 height={thumbnail.height}
-                sizes="(max-width: 1200px) 90vw, 1050px"
+                sizes={responsiveSizes}
+                quality={95}
                 draggable={false}
               />
             ) : (

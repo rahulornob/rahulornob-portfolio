@@ -21,6 +21,7 @@ export function Hero({ content }: { content?: HeroContent }) {
         alt={content?.backgroundImage?.alt ?? ""}
         fill
         sizes="100vw"
+        quality={95}
         preload
       />
 

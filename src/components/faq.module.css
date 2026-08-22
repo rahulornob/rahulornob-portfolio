@@ -39,7 +39,7 @@
 
 .visible .item {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .item:hover,
@@ -141,7 +141,7 @@
 }
 
 .open .answer p {
-  transform: translateY(0);
+  transform: none;
 }
 
 @media (max-width: 900px) {

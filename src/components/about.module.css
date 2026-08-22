@@ -42,7 +42,7 @@
 
 .visible .eyebrow {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .marquee {
@@ -59,7 +59,7 @@
 
 .visible .marquee {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .marquee::before,

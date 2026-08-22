@@ -109,6 +109,7 @@ function ServiceItem({
                           width={image.width ?? 800}
                           height={image.height ?? 600}
                           sizes="(max-width: 640px) 72vw, 240px"
+                          quality={95}
                         />
                       )}
                     </div>

@@ -75,7 +75,7 @@
 
 .visible .activeCard {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
 .portrait {
@@ -198,7 +198,7 @@
 
 .visible .dots {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .dots button {

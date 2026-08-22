@@ -279,6 +279,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
                   width={testimonial.portrait?.width ?? 1080}
                   height={testimonial.portrait?.height ?? 1350}
                   sizes="(max-width: 640px) calc(100vw - 32px), 300px"
+                  quality={95}
                   draggable={false}
                 />
               </div>
@@ -295,6 +296,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
                         alt=""
                         width={testimonial.companyLogo.width ?? 120}
                         height={testimonial.companyLogo.height ?? 40}
+                        quality={95}
                       />
                     </div>
                   ) : (
