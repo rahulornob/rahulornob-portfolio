@@ -66,8 +66,9 @@ function TagsInput({ onChange, value }: { onChange: (value: string[]) => void; v
     <input
       value={(value || []).join(", ")}
       onChange={(event) =>
-        onChange(event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean))
+        onChange(event.target.value.split(",").map((tag) => tag.trim()))
       }
+      onBlur={() => onChange((value || []).filter(Boolean))}
       placeholder="Web design, UI design, Motion"
     />
   );
@@ -324,7 +325,7 @@ export function AdminEditor({
             <SectionPanel title="Projects" description="Manage project copy, tags, gallery order, and carousel speed.">
               <Field label="Section heading" hint="Use a new line to control the heading break."><TextInput multiline value={content.projectsHeading} onChange={(projectsHeading) => setContent((current) => ({ ...current, projectsHeading }))} /></Field>
               {(content.projects || []).map((project, index) => (
-                <div className={styles.itemCard} key={`${project.slug}-${index}`}>
+                <div className={styles.itemCard} key={`project-${index}`}>
                   <ItemHeader index={index} label={project.title || "New project"} onMove={(direction) => setProjects(moveItem(content.projects || [], index, direction))} onRemove={() => setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index))} />
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={project.title} onChange={(title) => { const next = [...(content.projects || [])]; next[index] = { ...project, title }; setProjects(next); }} /></Field>
@@ -347,7 +348,7 @@ export function AdminEditor({
               <Field label="Heading"><TextInput value={services.heading} onChange={(heading) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, heading } }))} /></Field>
               <Field label="Intro"><TextInput multiline value={services.intro} onChange={(intro) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, intro } }))} /></Field>
               {(services.items || []).map((service, index) => (
-                <div className={styles.itemCard} key={`${service.id}-${index}`}>
+                <div className={styles.itemCard} key={`service-${index}`}>
                   <ItemHeader index={index} label={service.title || "New service"} onMove={(direction) => setServices(moveItem(services.items || [], index, direction))} onRemove={() => setServices((services.items || []).filter((_, itemIndex) => itemIndex !== index))} />
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={service.title} onChange={(title) => { const next = [...(services.items || [])]; next[index] = { ...service, title }; setServices(next); }} /></Field>
@@ -366,7 +367,7 @@ export function AdminEditor({
             <SectionPanel title="Testimonials" description="Client quotes, people, and company details.">
               <Field label="Heading"><TextInput value={testimonials.heading} onChange={(heading) => setContent((current) => ({ ...current, testimonialsSection: { ...current.testimonialsSection, heading } }))} /></Field>
               {(testimonials.items || []).map((item, index) => (
-                <div className={styles.itemCard} key={`${item.author}-${index}`}>
+                <div className={styles.itemCard} key={`testimonial-${index}`}>
                   <ItemHeader index={index} label={item.author || "New testimonial"} onMove={(direction) => setTestimonials(moveItem(testimonials.items || [], index, direction))} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} />
                   <Field label="Quote"><TextInput multiline value={item.quote} onChange={(quote) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, quote }; setTestimonials(next); }} /></Field>
                   <div className={styles.threeColumns}>
@@ -388,7 +389,7 @@ export function AdminEditor({
             <SectionPanel title="FAQ" description="Questions shown before the footer.">
               <Field label="Heading"><TextInput value={faq.heading} onChange={(heading) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, heading } }))} /></Field>
               {(faq.items || []).map((item, index) => (
-                <div className={styles.itemCard} key={`${item.question}-${index}`}>
+                <div className={styles.itemCard} key={`faq-${index}`}>
                   <ItemHeader index={index} label={item.question || "New question"} onMove={(direction) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: moveItem(current.faqSection?.items || [], index, direction) } }))} onRemove={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: (current.faqSection?.items || []).filter((_, itemIndex) => itemIndex !== index) } }))} />
                   <Field label="Question"><TextInput value={item.question} onChange={(question) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, question }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
                   <Field label="Answer"><TextInput multiline value={item.answer} onChange={(answer) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, answer }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
@@ -440,7 +441,7 @@ function LinkEditor({
     <div className={styles.linkEditor}>
       <div className={styles.fieldLabel}>{title}</div>
       {items.map((item, index) => (
-        <div className={styles.linkRow} key={`${item.label}-${index}`}>
+        <div className={styles.linkRow} key={`link-${index}`}>
           <input aria-label={`${title} label`} value={item.label || ""} placeholder="Label" onChange={(event) => { const next = [...items]; next[index] = { ...item, label: event.target.value }; onChange(next); }} />
           <input aria-label={`${title} URL`} value={item.href || ""} placeholder="URL or #section" onChange={(event) => { const next = [...items]; next[index] = { ...item, href: event.target.value }; onChange(next); }} />
           <button type="button" onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}>×</button>
