@@ -642,6 +642,10 @@
   will-change: transform;
 }
 
+.itemCard + .itemCard {
+  margin-top: -10px;
+}
+
 .itemCard:hover {
   border-color: rgba(121, 116, 126, .18);
   background: #f9f5fb;
