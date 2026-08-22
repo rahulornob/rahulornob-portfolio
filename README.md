@@ -16,29 +16,30 @@ Local-only login defaults:
 - Email: `admin@local.test`
 - Password: `portfolio`
 
-## CMS production settings
+## Local content workflow
 
-Add these environment variables to the cPanel Node.js application:
+Content and uploads are versioned with the website:
+
+- `content/site-content.json` — website content
+- `public/media/` — uploaded images
+
+After editing and testing through the local CMS:
+
+```bash
+git add content/site-content.json public/media
+git commit -m "Update portfolio content"
+git push origin main
+```
+
+Production editing is disabled by default so the cPanel repository remains clean. The production CMS can still be opened as a read-only preview.
+
+Optional production login variables:
 
 ```text
 CMS_ADMIN_EMAIL=your-email@example.com
 CMS_ADMIN_PASSWORD=use-a-long-unique-password
 CMS_SESSION_SECRET=use-a-random-64-character-value
-CMS_DATA_DIR=/home/endbrack/portfolio-cms
 ```
-
-Generate the session secret with:
-
-```bash
-openssl rand -hex 32
-```
-
-`CMS_DATA_DIR` must be outside the Git repository. The server creates:
-
-- `content.json` — all published website copy and content
-- `media/` — images uploaded through the CMS
-
-Back up this folder from cPanel. Code deployments never overwrite it.
 
 ## cPanel deployment
 
@@ -56,4 +57,4 @@ NEXT_TEST_WASM=1 NODE_OPTIONS=--max-old-space-size=1024 npm run build
 touch tmp/restart.txt
 ```
 
-Content changes made at `/admin` are live immediately and do not require these deployment commands.
+Local content changes become live after pushing them to GitHub and deploying the HEAD commit in cPanel.

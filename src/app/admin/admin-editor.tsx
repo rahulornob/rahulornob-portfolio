@@ -202,7 +202,13 @@ function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
   return next;
 }
 
-export function AdminEditor({ initialContent }: { initialContent: SiteContent }) {
+export function AdminEditor({
+  editingEnabled,
+  initialContent,
+}: {
+  editingEnabled: boolean;
+  initialContent: SiteContent;
+}) {
   const router = useRouter();
   const [content, setContent] = useState<SiteContent>(() => structuredClone(initialContent));
   const [publishedSnapshot, setPublishedSnapshot] = useState(() => JSON.stringify(initialContent));
@@ -230,6 +236,7 @@ export function AdminEditor({ initialContent }: { initialContent: SiteContent })
   }
 
   async function publish() {
+    if (!editingEnabled) return;
     setPublishing(true);
     setNotice("");
     const response = await fetch("/api/admin/content", {
@@ -258,7 +265,7 @@ export function AdminEditor({ initialContent }: { initialContent: SiteContent })
   const footer = content.footer || {};
 
   return (
-    <main className={styles.dashboard}>
+    <main className={styles.dashboard} data-read-only={!editingEnabled}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarBrand}>
           <div className={styles.brandMark}>R</div>
@@ -279,11 +286,15 @@ export function AdminEditor({ initialContent }: { initialContent: SiteContent })
         <header className={styles.topbar}>
           <div>
             <span className={`${styles.statusDot} ${dirty ? styles.statusUnsaved : ""}`} />
-            {dirty ? "Unsaved changes" : "Everything published"}
+            {!editingEnabled
+              ? "Production preview — edit locally"
+              : dirty
+                ? "Unsaved changes"
+                : "Everything published"}
           </div>
           <div className={styles.topbarActions}>
             {notice ? <span>{notice}</span> : null}
-            <button className={styles.primaryButton} type="button" onClick={publish} disabled={!dirty || publishing}>{publishing ? "Publishing…" : "Publish changes"}</button>
+            <button className={styles.primaryButton} type="button" onClick={publish} disabled={!editingEnabled || !dirty || publishing}>{publishing ? "Saving…" : editingEnabled ? "Save locally" : "Local editing only"}</button>
           </div>
         </header>
 

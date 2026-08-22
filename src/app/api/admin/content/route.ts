@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { isAuthenticated } from "@/cms/auth";
+import { cmsEditingEnabled, isAuthenticated } from "@/cms/auth";
 import { isSameOrigin } from "@/cms/security";
 import { getSiteContent, saveSiteContent } from "@/cms/storage";
 import type { SiteContent } from "@/cms/types";
@@ -19,6 +19,13 @@ export async function GET() {
 export async function PUT(request: Request) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
+  if (!cmsEditingEnabled()) {
+    return NextResponse.json(
+      { error: "Production editing is disabled. Make changes locally and deploy with Git." },
+      { status: 403 },
+    );
   }
 
   if (!isSameOrigin(request)) {

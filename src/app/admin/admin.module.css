@@ -177,6 +177,11 @@
 .sectionPanel > header { padding-bottom: 34px; border-bottom: 1px solid var(--line); }
 .formStack { display: grid; gap: 24px; padding-top: 28px; }
 
+.dashboard[data-read-only="true"] .formStack {
+  pointer-events: none;
+  opacity: .58;
+}
+
 .twoColumns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .threeColumns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 

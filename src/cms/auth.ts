@@ -31,6 +31,11 @@ export function cmsConfigured() {
   );
 }
 
+export function cmsEditingEnabled() {
+  return process.env.NODE_ENV !== "production" ||
+    process.env.CMS_ALLOW_PRODUCTION_EDITS === "true";
+}
+
 export function validCredentials(email: string, password: string) {
   const expectedEmail = process.env.CMS_ADMIN_EMAIL ||
     (process.env.NODE_ENV !== "production" ? "admin@local.test" : "");
