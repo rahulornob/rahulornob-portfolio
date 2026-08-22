@@ -117,6 +117,7 @@ function ThumbnailSet({
 }
 
 function ProjectCard({ project, speed }: { project: Project; speed: number }) {
+  const galleryRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({
     active: false,
@@ -146,6 +147,29 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     resizeObserver.observe(track);
     return () => resizeObserver.disconnect();
   }, [speed]);
+
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    const track = trackRef.current;
+    if (!gallery || !track) return;
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          track.dataset.playing = "true";
+          return;
+        }
+
+        track.dataset.playing = "false";
+        const animation = track.getAnimations()[0];
+        if (animation) animation.currentTime = 0;
+      },
+      { rootMargin: "0px 0px 5% 0px", threshold: 0 },
+    );
+
+    visibilityObserver.observe(gallery);
+    return () => visibilityObserver.disconnect();
+  }, []);
 
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
     const track = gallery.querySelector(`.${styles.thumbnailTrack}`);
@@ -209,6 +233,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   return (
     <article className={styles.project} data-project-card>
       <div
+        ref={galleryRef}
         className={styles.gallery}
         role="region"
         aria-label={`${project.title} image gallery. Drag left or right to browse.`}

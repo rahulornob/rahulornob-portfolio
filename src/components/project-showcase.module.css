@@ -67,7 +67,7 @@
   will-change: transform;
 }
 
-.thumbnailTrack[data-speed-ready="true"] {
+.thumbnailTrack[data-speed-ready="true"][data-playing="true"] {
   animation-play-state: running;
 }
 
@@ -213,11 +213,11 @@
 
 @keyframes gallery-forward {
   from {
-    transform: translateX(-12%);
+    transform: translateX(0);
   }
 
   to {
-    transform: translateX(-62%);
+    transform: translateX(-50%);
   }
 }
 
@@ -337,6 +337,6 @@
 
   .thumbnailTrack {
     animation: none;
-    transform: translateX(-12%);
+    transform: translateX(0);
   }
 }
