@@ -1,6 +1,12 @@
 "use client";
 
-import { ChangeEvent, ReactNode, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  DragEvent as ReactDragEvent,
+  ReactNode,
+  useMemo,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import type {
   CmsImage,
@@ -176,14 +182,16 @@ function ItemHeader({
   expanded,
   index,
   label,
-  onMove,
+  onDragEnd,
+  onDragStart,
   onRemove,
   onToggle,
 }: {
   expanded?: boolean;
   index: number;
   label: string;
-  onMove: (direction: -1 | 1) => void;
+  onDragEnd: () => void;
+  onDragStart: (event: ReactDragEvent<HTMLButtonElement>) => void;
   onRemove: () => void;
   onToggle?: () => void;
 }) {
@@ -203,19 +211,37 @@ function ItemHeader({
         <h3>{label || `Item ${index + 1}`}</h3>
       )}
       <div>
-        <button type="button" onClick={() => onMove(-1)} aria-label="Move up">↑</button>
-        <button type="button" onClick={() => onMove(1)} aria-label="Move down">↓</button>
+        <button
+          type="button"
+          className={styles.dragHandle}
+          draggable
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          aria-label={`Drag to reorder ${label || `item ${index + 1}`}`}
+          title="Drag to reorder"
+        >
+          <svg aria-hidden="true" viewBox="0 0 12 18">
+            <circle cx="3" cy="3" r="1.25" />
+            <circle cx="9" cy="3" r="1.25" />
+            <circle cx="3" cy="9" r="1.25" />
+            <circle cx="9" cy="9" r="1.25" />
+            <circle cx="3" cy="15" r="1.25" />
+            <circle cx="9" cy="15" r="1.25" />
+          </svg>
+        </button>
         <button type="button" className={styles.dangerButton} onClick={onRemove}>Remove</button>
       </div>
     </div>
   );
 }
 
-function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
-  const destination = index + direction;
-  if (destination < 0 || destination >= items.length) return items;
+function moveItem<T>(items: T[], from: number, destination: number) {
+  if (from === destination || destination < 0 || destination >= items.length) {
+    return items;
+  }
   const next = [...items];
-  [next[index], next[destination]] = [next[destination], next[index]];
+  const [item] = next.splice(from, 1);
+  next.splice(destination, 0, item);
   return next;
 }
 
@@ -233,6 +259,10 @@ export function AdminEditor({
   const [expandedProjects, setExpandedProjects] = useState<Set<number>>(
     () => new Set(),
   );
+  const [dragging, setDragging] = useState<{
+    group: "projects" | "services" | "testimonials" | "faq";
+    index: number;
+  } | null>(null);
   const [publishing, setPublishing] = useState(false);
   const [notice, setNotice] = useState("");
   const dirty = useMemo(() => JSON.stringify(content) !== publishedSnapshot, [content, publishedSnapshot]);
@@ -248,6 +278,25 @@ export function AdminEditor({
       else next.add(index);
       return next;
     });
+  }
+
+  function startDrag(
+    event: ReactDragEvent<HTMLButtonElement>,
+    group: "projects" | "services" | "testimonials" | "faq",
+    index: number,
+  ) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", `${group}:${index}`);
+    setDragging({ group, index });
+  }
+
+  function allowDrop(
+    event: ReactDragEvent<HTMLDivElement>,
+    group: "projects" | "services" | "testimonials" | "faq",
+  ) {
+    if (dragging?.group !== group) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
   }
 
   function setServices(items: ServiceContent[]) {
@@ -355,8 +404,8 @@ export function AdminEditor({
               {(content.projects || []).map((project, index) => {
                 const expanded = expandedProjects.has(index);
                 return (
-                <div className={styles.itemCard} data-collapsed={!expanded} key={`project-${index}`}>
-                  <ItemHeader expanded={expanded} index={index} label={project.title || "New project"} onToggle={() => toggleProject(index)} onMove={(direction) => { setProjects(moveItem(content.projects || [], index, direction)); setExpandedProjects(new Set()); }} onRemove={() => { setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index)); setExpandedProjects(new Set()); }} />
+                <div className={styles.itemCard} data-collapsed={!expanded} data-dragging={dragging?.group === "projects" && dragging.index === index} onDragOver={(event) => allowDrop(event, "projects")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "projects") setProjects(moveItem(content.projects || [], dragging.index, index)); setDragging(null); setExpandedProjects(new Set()); }} key={`project-${index}`}>
+                  <ItemHeader expanded={expanded} index={index} label={project.title || "New project"} onToggle={() => toggleProject(index)} onDragStart={(event) => startDrag(event, "projects", index)} onDragEnd={() => setDragging(null)} onRemove={() => { setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index)); setExpandedProjects(new Set()); }} />
                   {expanded ? <>
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={project.title} onChange={(title) => { const next = [...(content.projects || [])]; next[index] = { ...project, title }; setProjects(next); }} /></Field>
@@ -380,8 +429,8 @@ export function AdminEditor({
               <Field label="Heading"><TextInput value={services.heading} onChange={(heading) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, heading } }))} /></Field>
               <Field label="Intro"><TextInput multiline value={services.intro} onChange={(intro) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, intro } }))} /></Field>
               {(services.items || []).map((service, index) => (
-                <div className={styles.itemCard} key={`service-${index}`}>
-                  <ItemHeader index={index} label={service.title || "New service"} onMove={(direction) => setServices(moveItem(services.items || [], index, direction))} onRemove={() => setServices((services.items || []).filter((_, itemIndex) => itemIndex !== index))} />
+                <div className={styles.itemCard} data-dragging={dragging?.group === "services" && dragging.index === index} onDragOver={(event) => allowDrop(event, "services")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "services") setServices(moveItem(services.items || [], dragging.index, index)); setDragging(null); }} key={`service-${index}`}>
+                  <ItemHeader index={index} label={service.title || "New service"} onDragStart={(event) => startDrag(event, "services", index)} onDragEnd={() => setDragging(null)} onRemove={() => setServices((services.items || []).filter((_, itemIndex) => itemIndex !== index))} />
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={service.title} onChange={(title) => { const next = [...(services.items || [])]; next[index] = { ...service, title }; setServices(next); }} /></Field>
                     <Field label="ID"><TextInput value={service.id} onChange={(id) => { const next = [...(services.items || [])]; next[index] = { ...service, id }; setServices(next); }} /></Field>
@@ -399,8 +448,8 @@ export function AdminEditor({
             <SectionPanel title="Testimonials" description="Client quotes, people, and company details.">
               <Field label="Heading"><TextInput value={testimonials.heading} onChange={(heading) => setContent((current) => ({ ...current, testimonialsSection: { ...current.testimonialsSection, heading } }))} /></Field>
               {(testimonials.items || []).map((item, index) => (
-                <div className={styles.itemCard} key={`testimonial-${index}`}>
-                  <ItemHeader index={index} label={item.author || "New testimonial"} onMove={(direction) => setTestimonials(moveItem(testimonials.items || [], index, direction))} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} />
+                <div className={styles.itemCard} data-dragging={dragging?.group === "testimonials" && dragging.index === index} onDragOver={(event) => allowDrop(event, "testimonials")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "testimonials") setTestimonials(moveItem(testimonials.items || [], dragging.index, index)); setDragging(null); }} key={`testimonial-${index}`}>
+                  <ItemHeader index={index} label={item.author || "New testimonial"} onDragStart={(event) => startDrag(event, "testimonials", index)} onDragEnd={() => setDragging(null)} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} />
                   <Field label="Quote"><TextInput multiline value={item.quote} onChange={(quote) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, quote }; setTestimonials(next); }} /></Field>
                   <div className={styles.threeColumns}>
                     <Field label="Name"><TextInput value={item.author} onChange={(author) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, author }; setTestimonials(next); }} /></Field>
@@ -421,8 +470,8 @@ export function AdminEditor({
             <SectionPanel title="FAQ" description="Questions shown before the footer.">
               <Field label="Heading"><TextInput value={faq.heading} onChange={(heading) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, heading } }))} /></Field>
               {(faq.items || []).map((item, index) => (
-                <div className={styles.itemCard} key={`faq-${index}`}>
-                  <ItemHeader index={index} label={item.question || "New question"} onMove={(direction) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: moveItem(current.faqSection?.items || [], index, direction) } }))} onRemove={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: (current.faqSection?.items || []).filter((_, itemIndex) => itemIndex !== index) } }))} />
+                <div className={styles.itemCard} data-dragging={dragging?.group === "faq" && dragging.index === index} onDragOver={(event) => allowDrop(event, "faq")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "faq") setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: moveItem(current.faqSection?.items || [], dragging.index, index) } })); setDragging(null); }} key={`faq-${index}`}>
+                  <ItemHeader index={index} label={item.question || "New question"} onDragStart={(event) => startDrag(event, "faq", index)} onDragEnd={() => setDragging(null)} onRemove={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: (current.faqSection?.items || []).filter((_, itemIndex) => itemIndex !== index) } }))} />
                   <Field label="Question"><TextInput value={item.question} onChange={(question) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, question }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
                   <Field label="Answer"><TextInput multiline value={item.answer} onChange={(answer) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, answer }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
                 </div>
