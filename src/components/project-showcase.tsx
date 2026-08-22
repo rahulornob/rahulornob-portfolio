@@ -133,7 +133,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     if (!track) return;
 
     const syncSpeed = () => {
-      const travelDistance = track.scrollWidth * 0.5;
+      const travelDistance = track.scrollWidth / 3;
       if (travelDistance <= 0) return;
       track.style.setProperty(
         "--project-duration",
@@ -207,7 +207,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     if (!animation || !track) return;
 
     const duration = Number(animation.effect?.getTiming().duration);
-    const travelDistance = track.scrollWidth * 0.5;
+    const travelDistance = track.scrollWidth / 3;
     if (!Number.isFinite(duration) || travelDistance <= 0) return;
 
     const dragDistance = event.clientX - dragRef.current.startX;
@@ -247,6 +247,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         onPointerCancel={finishDrag}
       >
         <div ref={trackRef} className={styles.thumbnailTrack} style={motionStyle}>
+          <ThumbnailSet thumbnails={project.thumbnails} hidden />
           <ThumbnailSet thumbnails={project.thumbnails} />
           <ThumbnailSet thumbnails={project.thumbnails} hidden />
         </div>

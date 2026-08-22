@@ -213,11 +213,11 @@
 
 @keyframes gallery-forward {
   from {
-    transform: translateX(0);
+    transform: translateX(-33.333333%);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translateX(-66.666667%);
   }
 }
 
@@ -337,6 +337,6 @@
 
   .thumbnailTrack {
     animation: none;
-    transform: translateX(0);
+    transform: translateX(-33.333333%);
   }
 }
