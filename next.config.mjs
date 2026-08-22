@@ -18,7 +18,7 @@ const nextConfig = {
     return [
       {
         source: "/studio/:path*",
-        destination: "https://rahulornob-portfolio.sanity.studio/:path*",
+        destination: "/admin",
         permanent: false,
       },
     ];

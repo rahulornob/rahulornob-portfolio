@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { AboutContent } from "@/sanity/types";
+import type { AboutContent } from "@/cms/types";
 import { useEffect, useRef, useState } from "react";
 import RevealHeading from "./RevealHeading";
 import styles from "./about.module.css";

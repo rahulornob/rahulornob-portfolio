@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Navigation } from "@/components/navigation";
-import type { HeroContent } from "@/sanity/types";
+import type { HeroContent } from "@/cms/types";
 import ButtonSwooshContent from "./ButtonSwooshContent";
 import Magnet from "./Magnet";
 import styles from "./hero.module.css";

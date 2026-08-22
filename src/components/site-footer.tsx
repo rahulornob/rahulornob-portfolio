@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { FooterContent } from "@/sanity/types";
+import type { FooterContent } from "@/cms/types";
 import { useEffect, useRef, useState } from "react";
 import ButtonSwooshContent from "./ButtonSwooshContent";
 import Magnet from "./Magnet";

@@ -17,7 +17,7 @@
 /.next/
 /out/
 /dist/
-/.sanity/
+/.cms-data/
 
 # production
 /build

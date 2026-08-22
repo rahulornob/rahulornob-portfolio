@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { ProjectContent } from "@/sanity/types";
+import type { ProjectContent } from "@/cms/types";
 import ButtonSwooshContent from "./ButtonSwooshContent";
 import Magnet from "./Magnet";
 import RevealHeading from "./RevealHeading";

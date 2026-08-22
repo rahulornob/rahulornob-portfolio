@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { TestimonialContent, TestimonialsContent } from "@/sanity/types";
+import type { TestimonialContent, TestimonialsContent } from "@/cms/types";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./testimonials.module.css";

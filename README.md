@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rahul Ornob Portfolio
 
-## Getting Started
+Next.js portfolio with a lightweight self-hosted CMS.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. The CMS is at `http://localhost:3000/admin`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Local-only login defaults:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Email: `admin@local.test`
+- Password: `portfolio`
 
-## Learn More
+## CMS production settings
 
-To learn more about Next.js, take a look at the following resources:
+Add these environment variables to the cPanel Node.js application:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+CMS_ADMIN_EMAIL=your-email@example.com
+CMS_ADMIN_PASSWORD=use-a-long-unique-password
+CMS_SESSION_SECRET=use-a-random-64-character-value
+CMS_DATA_DIR=/home/endbrack/portfolio-cms
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Generate the session secret with:
 
-## Deploy on Vercel
+```bash
+openssl rand -hex 32
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`CMS_DATA_DIR` must be outside the Git repository. The server creates:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `content.json` — all published website copy and content
+- `media/` — images uploaded through the CMS
+
+Back up this folder from cPanel. Code deployments never overwrite it.
+
+## cPanel deployment
+
+Application root: `repositories/portfolio`
+
+Startup file: `server.js`
+
+After pulling a new code version:
+
+```bash
+source /home/endbrack/nodevenv/repositories/portfolio/24/bin/activate
+cd /home/endbrack/repositories/portfolio
+npm install --include=dev
+NEXT_TEST_WASM=1 NODE_OPTIONS=--max-old-space-size=1024 npm run build
+touch tmp/restart.txt
+```
+
+Content changes made at `/admin` are live immediately and do not require these deployment commands.
