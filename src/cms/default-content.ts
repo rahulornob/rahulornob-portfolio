@@ -1,27 +1,5 @@
 import type { SiteContent } from "./types";
 
-const projectImageIds = [
-  ["07cd6109c2a18373e81f9f6f429906c710f57004", "01"],
-  ["a6068cd45fa43e72c3fd2f26e6dc2f2e29c19acb", "02"],
-  ["3a5999e20d8a165e43966dfbb3ee9530569fceae", "03"],
-  ["a2c5e552d3f89b54cb3bb12191513a9a4de5c846", "04"],
-  ["969818d2d8e10d19b3cc97bc0382f74f1321c159", "05"],
-  ["d1a61f2e663f9ecb93f91eff53f1b6a1e043165c", "06"],
-  ["b7d8121fd2a299c31b94f4c5e352581580573a7f", "07"],
-  ["ed6b7b50379bfe71dc6d6f1a2c58006494db0a7c", "08"],
-  ["835920ab8466181a4030f90e1082b363dc1523b0", "09"],
-  ["1fb828e2af53fb8cda6d0630aed5c6b55c16f421", "10"],
-  ["2f36d32a754e86c0e6adee78f485eaed4c33054e", "11"],
-  ["b8754c74b351a77cf6bfd5aba67f7c4f88f83073", "12"],
-  ["749ed1f8f4d70c42e258611f8ad28576e88aae33", "13"],
-  ["400536a49052b780a20631cb1fb49c88152f1670", "14"],
-  ["f141a0145c10bdf082767ea3fbead12d4ea5b254", "15"],
-  ["35058debb49a52fe0c701a28587f8a34d5490509", "16"],
-  ["c3aa127f8ef5d1885f7dde3c571743cf8a9456b0", "17"],
-  ["ca603460ce714e9dcff77dc6cea94ae01e30dc4f", "18"],
-  ["98cd0a19ba5e287bb31aa0a553b3f4b9d1b7a463", "1"],
-] as const;
-
 export const defaultContent: SiteContent = {
   hero: {
     headline: "Making the internet slightly less annoying.",
@@ -44,12 +22,7 @@ export const defaultContent: SiteContent = {
       description:
         "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
       autoplayDuration: 42,
-      images: projectImageIds.map(([id, number]) => ({
-        alt: `now-health-redesign-project-${number}`,
-        height: 600,
-        url: `https://cdn.sanity.io/images/eo19umac/production/${id}-800x600.jpg`,
-        width: 800,
-      })),
+      images: [],
     },
   ],
   servicesSection: {
