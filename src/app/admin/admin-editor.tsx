@@ -409,14 +409,12 @@ function ImageList({
 }
 
 function ItemHeader({
-  dragButton,
   expanded,
   index,
   label,
   onRemove,
   onToggle,
 }: {
-  dragButton: ReactNode;
   expanded?: boolean;
   index: number;
   label: string;
@@ -425,21 +423,22 @@ function ItemHeader({
 }) {
   return (
     <div className={styles.itemHeader}>
-      {onToggle ? (
-        <button
-          type="button"
-          className={styles.collapseTrigger}
-          aria-expanded={expanded}
-          onClick={onToggle}
-        >
-          <span>{label || `Item ${index + 1}`}</span>
-          <span aria-hidden="true">{expanded ? "−" : "+"}</span>
-        </button>
-      ) : (
-        <h3>{label || `Item ${index + 1}`}</h3>
-      )}
-      <div>
-        {dragButton}
+      <div className={styles.itemHeaderMain}>
+        <span className={styles.dragHandle} aria-hidden="true"><DragDots /></span>
+        {onToggle ? (
+          <button
+            type="button"
+            className={styles.collapseTrigger}
+            aria-expanded={expanded}
+            onClick={onToggle}
+          >
+            <span>{label || `Item ${index + 1}`}</span>
+          </button>
+        ) : (
+          <h3>{label || `Item ${index + 1}`}</h3>
+        )}
+      </div>
+      <div className={styles.itemHeaderActions}>
         <button
           type="button"
           className={styles.dangerButton}
@@ -477,7 +476,6 @@ function SortableItemCard({
     attributes,
     isDragging,
     listeners,
-    setActivatorNodeRef,
     setNodeRef,
     transform,
     transition,
@@ -498,21 +496,11 @@ function SortableItemCard({
       className={styles.itemCard}
       data-collapsed={onToggle ? !expanded : undefined}
       data-dragging={isDragging}
+      aria-label={`Drag to reorder ${label || `item ${index + 1}`}`}
+      {...attributes}
+      {...listeners}
     >
       <ItemHeader
-        dragButton={(
-          <button
-            type="button"
-            ref={setActivatorNodeRef}
-            className={styles.dragHandle}
-            aria-label={`Drag to reorder ${label || `item ${index + 1}`}`}
-            title="Drag to reorder"
-            {...attributes}
-            {...listeners}
-          >
-            <DragDots />
-          </button>
-        )}
         expanded={expanded}
         index={index}
         label={label}

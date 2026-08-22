@@ -632,6 +632,7 @@
   border: 1px solid transparent;
   border-radius: 20px;
   background: var(--md-surface-container-low);
+  cursor: grab;
   transition:
     background-color 160ms ease,
     border-color 160ms ease,
@@ -650,6 +651,12 @@
   opacity: .78;
   border-color: var(--md-primary);
   box-shadow: 0 16px 40px rgba(29, 27, 32, .16);
+  cursor: grabbing;
+}
+
+.itemCard input,
+.itemCard textarea {
+  cursor: text;
 }
 
 .itemHeader {
@@ -682,10 +689,17 @@
   white-space: nowrap;
 }
 
-.itemHeader > div {
+.itemHeaderMain,
+.itemHeaderActions {
   display: flex;
+  align-items: center;
   flex-shrink: 0;
   gap: 6px;
+}
+
+.itemHeaderMain {
+  min-width: 0;
+  flex: 1;
 }
 
 .itemHeader button,
@@ -712,8 +726,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-start;
   padding: 0 8px;
   border-radius: 12px;
   font-size: 15px;
@@ -721,29 +734,20 @@
   text-align: left;
 }
 
-.collapseTrigger span:first-child {
+.collapseTrigger span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.collapseTrigger span:last-child {
-  color: var(--md-primary);
-  font-size: 22px;
-  font-weight: 400;
-}
-
 .itemHeader .dragHandle {
+  width: 40px;
+  height: 40px;
   display: grid;
+  flex: none;
   padding: 0;
   place-items: center;
   color: var(--md-on-surface-variant);
-  cursor: grab;
-  touch-action: none;
-}
-
-.itemHeader .dragHandle:active {
-  cursor: grabbing;
 }
 
 .dragHandle svg {
