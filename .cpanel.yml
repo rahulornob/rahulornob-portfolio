@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export PATH=/home/endbrack/nodevenv/repositories/portfolio/24/bin:$PATH
+    - cd /home/endbrack/repositories/portfolio && npm install --include=dev
+    - cd /home/endbrack/repositories/portfolio && NEXT_TEST_WASM=1 NODE_OPTIONS=--max-old-space-size=1024 npm run build
+    - mkdir -p /home/endbrack/repositories/portfolio/tmp
+    - touch /home/endbrack/repositories/portfolio/tmp/restart.txt
