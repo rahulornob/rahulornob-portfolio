@@ -2,7 +2,7 @@
 
 import {
   ChangeEvent,
-  DragEvent as ReactDragEvent,
+  CSSProperties,
   ReactNode,
   useCallback,
   useEffect,
@@ -10,6 +10,24 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import type {
   CmsImage,
   ProjectContent,
@@ -111,6 +129,116 @@ async function imageDimensions(file: File) {
   }
 }
 
+function SortableList({
+  children,
+  grid = false,
+  ids,
+  onMove,
+}: {
+  children: ReactNode;
+  grid?: boolean;
+  ids: string[];
+  onMove: (from: number, to: number) => void;
+}) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    if (!event.over || event.active.id === event.over.id) return;
+    const from = ids.indexOf(String(event.active.id));
+    const to = ids.indexOf(String(event.over.id));
+    if (from >= 0 && to >= 0) onMove(from, to);
+  }
+
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={ids} strategy={grid ? rectSortingStrategy : verticalListSortingStrategy}>
+        {children}
+      </SortableContext>
+    </DndContext>
+  );
+}
+
+function DragDots() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 12 18">
+      <circle cx="3" cy="3" r="1.25" />
+      <circle cx="9" cy="3" r="1.25" />
+      <circle cx="3" cy="9" r="1.25" />
+      <circle cx="9" cy="9" r="1.25" />
+      <circle cx="3" cy="15" r="1.25" />
+      <circle cx="9" cy="15" r="1.25" />
+    </svg>
+  );
+}
+
+function SortableImageItem({
+  id,
+  image,
+  images,
+  index,
+  onChange,
+}: {
+  id: string;
+  image: CmsImage;
+  images: CmsImage[];
+  index: number;
+  onChange: (images: CmsImage[]) => void;
+}) {
+  const {
+    attributes,
+    isDragging,
+    listeners,
+    setActivatorNodeRef,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({
+    id,
+    transition: { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" },
+  });
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 3 : undefined,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className={styles.imageItem} data-dragging={isDragging}>
+      <div className={styles.imagePreview}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={image.url} alt="" draggable={false} />
+        <button
+          type="button"
+          ref={setActivatorNodeRef}
+          className={styles.imageDragHandle}
+          aria-label={`Drag image ${index + 1} to reorder`}
+          title="Drag to reorder"
+          {...attributes}
+          {...listeners}
+        >
+          <DragDots />
+        </button>
+      </div>
+      <input
+        aria-label="Image alt text"
+        value={image.alt || ""}
+        onChange={(event) => {
+          const next = [...images];
+          next[index] = { ...image, alt: event.target.value };
+          onChange(next);
+        }}
+        placeholder="Alt text"
+      />
+      <div className={styles.imageActions}>
+        <button type="button" onClick={() => onChange(images.filter((_, itemIndex) => itemIndex !== index))}>Remove</button>
+      </div>
+    </div>
+  );
+}
+
 function ImageList({
   images = [],
   label = "Images",
@@ -125,6 +253,7 @@ function ImageList({
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState("");
+  const imageIds = images.map((_, index) => `image-${index}`);
 
   async function uploadFiles(files: File[]) {
     if (!files.length) return;
@@ -155,41 +284,48 @@ function ImageList({
     event.target.value = "";
   }
 
-  function move(index: number, direction: -1 | 1) {
-    const next = [...images];
-    const destination = index + direction;
-    if (destination < 0 || destination >= next.length) return;
-    [next[index], next[destination]] = [next[destination], next[index]];
-    onChange(next);
-  }
-
   return (
     <div className={styles.imageField}>
       <div className={styles.fieldLabel}>{label}</div>
       {images.length ? (
-        <div className={styles.imageGrid}>
-          {images.map((image, index) => (
-            <div className={styles.imageItem} key={`${image.url}-${index}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image.url} alt="" />
-              <input
-                aria-label="Image alt text"
-                value={image.alt || ""}
-                onChange={(event) => {
-                  const next = [...images];
-                  next[index] = { ...image, alt: event.target.value };
-                  onChange(next);
-                }}
-                placeholder="Alt text"
-              />
-              <div className={styles.imageActions}>
-                {!single ? <button type="button" onClick={() => move(index, -1)}>←</button> : null}
-                {!single ? <button type="button" onClick={() => move(index, 1)}>→</button> : null}
-                <button type="button" onClick={() => onChange(images.filter((_, itemIndex) => itemIndex !== index))}>Remove</button>
+        single ? (
+          <div className={styles.imageGrid}>
+            {images.map((image, index) => (
+              <div className={styles.imageItem} key={`${image.url}-${index}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={image.url} alt="" />
+                <input
+                  aria-label="Image alt text"
+                  value={image.alt || ""}
+                  onChange={(event) => {
+                    const next = [...images];
+                    next[index] = { ...image, alt: event.target.value };
+                    onChange(next);
+                  }}
+                  placeholder="Alt text"
+                />
+                <div className={styles.imageActions}>
+                  <button type="button" onClick={() => onChange([])}>Remove</button>
+                </div>
               </div>
+            ))}
+          </div>
+        ) : (
+          <SortableList grid ids={imageIds} onMove={(from, to) => onChange(arrayMove(images, from, to))}>
+            <div className={styles.imageGrid}>
+              {images.map((image, index) => (
+                <SortableImageItem
+                  id={imageIds[index]}
+                  image={image}
+                  images={images}
+                  index={index}
+                  key={`${image.url}-${index}`}
+                  onChange={onChange}
+                />
+              ))}
             </div>
-          ))}
-        </div>
+          </SortableList>
+        )
       ) : null}
       {(!single || !images.length) ? (
         <label
@@ -224,19 +360,17 @@ function ImageList({
 }
 
 function ItemHeader({
+  dragButton,
   expanded,
   index,
   label,
-  onDragEnd,
-  onDragStart,
   onRemove,
   onToggle,
 }: {
+  dragButton: ReactNode;
   expanded?: boolean;
   index: number;
   label: string;
-  onDragEnd: () => void;
-  onDragStart: (event: ReactDragEvent<HTMLButtonElement>) => void;
   onRemove: () => void;
   onToggle?: () => void;
 }) {
@@ -256,24 +390,7 @@ function ItemHeader({
         <h3>{label || `Item ${index + 1}`}</h3>
       )}
       <div>
-        <button
-          type="button"
-          className={styles.dragHandle}
-          draggable
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          aria-label={`Drag to reorder ${label || `item ${index + 1}`}`}
-          title="Drag to reorder"
-        >
-          <svg aria-hidden="true" viewBox="0 0 12 18">
-            <circle cx="3" cy="3" r="1.25" />
-            <circle cx="9" cy="3" r="1.25" />
-            <circle cx="3" cy="9" r="1.25" />
-            <circle cx="9" cy="9" r="1.25" />
-            <circle cx="3" cy="15" r="1.25" />
-            <circle cx="9" cy="15" r="1.25" />
-          </svg>
-        </button>
+        {dragButton}
         <button
           type="button"
           className={styles.dangerButton}
@@ -290,14 +407,72 @@ function ItemHeader({
   );
 }
 
-function moveItem<T>(items: T[], from: number, destination: number) {
-  if (from === destination || destination < 0 || destination >= items.length) {
-    return items;
-  }
-  const next = [...items];
-  const [item] = next.splice(from, 1);
-  next.splice(destination, 0, item);
-  return next;
+function SortableItemCard({
+  children,
+  expanded,
+  id,
+  index,
+  label,
+  onRemove,
+  onToggle,
+}: {
+  children: ReactNode;
+  expanded?: boolean;
+  id: string;
+  index: number;
+  label: string;
+  onRemove: () => void;
+  onToggle?: () => void;
+}) {
+  const {
+    attributes,
+    isDragging,
+    listeners,
+    setActivatorNodeRef,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({
+    id,
+    transition: { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" },
+  });
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 4 : undefined,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={styles.itemCard}
+      data-collapsed={onToggle ? !expanded : undefined}
+      data-dragging={isDragging}
+    >
+      <ItemHeader
+        dragButton={(
+          <button
+            type="button"
+            ref={setActivatorNodeRef}
+            className={styles.dragHandle}
+            aria-label={`Drag to reorder ${label || `item ${index + 1}`}`}
+            title="Drag to reorder"
+            {...attributes}
+            {...listeners}
+          >
+            <DragDots />
+          </button>
+        )}
+        expanded={expanded}
+        index={index}
+        label={label}
+        onRemove={onRemove}
+        onToggle={onToggle}
+      />
+      {children}
+    </div>
+  );
 }
 
 export function AdminEditor({
@@ -314,10 +489,6 @@ export function AdminEditor({
   const [expandedProjects, setExpandedProjects] = useState<Set<number>>(
     () => new Set(),
   );
-  const [dragging, setDragging] = useState<{
-    group: "projects" | "services" | "testimonials" | "faq";
-    index: number;
-  } | null>(null);
   const [publishing, setPublishing] = useState(false);
   const [notice, setNotice] = useState("");
   const contentSnapshot = useMemo(() => JSON.stringify(content), [content]);
@@ -334,25 +505,6 @@ export function AdminEditor({
       else next.add(index);
       return next;
     });
-  }
-
-  function startDrag(
-    event: ReactDragEvent<HTMLButtonElement>,
-    group: "projects" | "services" | "testimonials" | "faq",
-    index: number,
-  ) {
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", `${group}:${index}`);
-    setDragging({ group, index });
-  }
-
-  function allowDrop(
-    event: ReactDragEvent<HTMLDivElement>,
-    group: "projects" | "services" | "testimonials" | "faq",
-  ) {
-    if (dragging?.group !== group) return;
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
   }
 
   function setServices(items: ServiceContent[]) {
@@ -484,11 +636,25 @@ export function AdminEditor({
           {active === "projects" ? (
             <SectionPanel title="Projects" description="Manage project copy, tags, gallery order, and carousel speed.">
               <Field label="Section heading" hint="Use a new line to control the heading break."><TextInput multiline value={content.projectsHeading} onChange={(projectsHeading) => setContent((current) => ({ ...current, projectsHeading }))} /></Field>
-              {(content.projects || []).map((project, index) => {
-                const expanded = expandedProjects.has(index);
-                return (
-                <div className={styles.itemCard} data-collapsed={!expanded} data-dragging={dragging?.group === "projects" && dragging.index === index} onDragOver={(event) => allowDrop(event, "projects")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "projects") setProjects(moveItem(content.projects || [], dragging.index, index)); setDragging(null); setExpandedProjects(new Set()); }} key={`project-${index}`}>
-                  <ItemHeader expanded={expanded} index={index} label={project.title || "New project"} onToggle={() => toggleProject(index)} onDragStart={(event) => startDrag(event, "projects", index)} onDragEnd={() => setDragging(null)} onRemove={() => { setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index)); setExpandedProjects(new Set()); }} />
+              <SortableList
+                ids={(content.projects || []).map((_, index) => `project-${index}`)}
+                onMove={(from, to) => {
+                  setProjects(arrayMove(content.projects || [], from, to));
+                  setExpandedProjects(new Set());
+                }}
+              >
+                {(content.projects || []).map((project, index) => {
+                  const expanded = expandedProjects.has(index);
+                  return (
+                  <SortableItemCard
+                    expanded={expanded}
+                    id={`project-${index}`}
+                    index={index}
+                    key={`project-${index}`}
+                    label={project.title || "New project"}
+                    onToggle={() => toggleProject(index)}
+                    onRemove={() => { setProjects((content.projects || []).filter((_, itemIndex) => itemIndex !== index)); setExpandedProjects(new Set()); }}
+                  >
                   {expanded ? <>
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={project.title} onChange={(title) => { const next = [...(content.projects || [])]; next[index] = { ...project, title }; setProjects(next); }} /></Field>
@@ -501,8 +667,9 @@ export function AdminEditor({
                   </div>
                   <ImageList images={project.images} onChange={(images) => { const next = [...(content.projects || [])]; next[index] = { ...project, images }; setProjects(next); }} />
                   </> : null}
-                </div>
-              );})}
+                  </SortableItemCard>
+                );})}
+              </SortableList>
               <button className={styles.addButton} type="button" onClick={() => { const nextIndex = (content.projects || []).length; setProjects([...(content.projects || []), { title: "New project", slug: `project-${Date.now()}`, description: "", tags: [], autoplayDuration: 42, images: [] }]); setExpandedProjects(new Set([nextIndex])); }}>+ Add project</button>
             </SectionPanel>
           ) : null}
@@ -511,9 +678,9 @@ export function AdminEditor({
             <SectionPanel title="Services" description="The accordion items in your services section.">
               <Field label="Heading"><TextInput value={services.heading} onChange={(heading) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, heading } }))} /></Field>
               <Field label="Intro"><TextInput multiline value={services.intro} onChange={(intro) => setContent((current) => ({ ...current, servicesSection: { ...current.servicesSection, intro } }))} /></Field>
-              {(services.items || []).map((service, index) => (
-                <div className={styles.itemCard} data-dragging={dragging?.group === "services" && dragging.index === index} onDragOver={(event) => allowDrop(event, "services")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "services") setServices(moveItem(services.items || [], dragging.index, index)); setDragging(null); }} key={`service-${index}`}>
-                  <ItemHeader index={index} label={service.title || "New service"} onDragStart={(event) => startDrag(event, "services", index)} onDragEnd={() => setDragging(null)} onRemove={() => setServices((services.items || []).filter((_, itemIndex) => itemIndex !== index))} />
+              <SortableList ids={(services.items || []).map((_, index) => `service-${index}`)} onMove={(from, to) => setServices(arrayMove(services.items || [], from, to))}>
+                {(services.items || []).map((service, index) => (
+                <SortableItemCard id={`service-${index}`} index={index} label={service.title || "New service"} onRemove={() => setServices((services.items || []).filter((_, itemIndex) => itemIndex !== index))} key={`service-${index}`}>
                   <div className={styles.twoColumns}>
                     <Field label="Title"><TextInput value={service.title} onChange={(title) => { const next = [...(services.items || [])]; next[index] = { ...service, title }; setServices(next); }} /></Field>
                     <Field label="ID"><TextInput value={service.id} onChange={(id) => { const next = [...(services.items || [])]; next[index] = { ...service, id }; setServices(next); }} /></Field>
@@ -521,8 +688,9 @@ export function AdminEditor({
                   <Field label="Description"><TextInput multiline value={service.description} onChange={(description) => { const next = [...(services.items || [])]; next[index] = { ...service, description }; setServices(next); }} /></Field>
                   <Field label="Tags"><TagsInput value={service.tags} onChange={(tags) => { const next = [...(services.items || [])]; next[index] = { ...service, tags }; setServices(next); }} /></Field>
                   <ImageList images={service.images} onChange={(images) => { const next = [...(services.items || [])]; next[index] = { ...service, images }; setServices(next); }} />
-                </div>
-              ))}
+                </SortableItemCard>
+                ))}
+              </SortableList>
               <button className={styles.addButton} type="button" onClick={() => setServices([...(services.items || []), { title: "New service", id: `service-${Date.now()}`, description: "", tags: [], images: [] }])}>+ Add service</button>
             </SectionPanel>
           ) : null}
@@ -530,9 +698,9 @@ export function AdminEditor({
           {active === "testimonials" ? (
             <SectionPanel title="Testimonials" description="Client quotes, people, and company details.">
               <Field label="Heading"><TextInput value={testimonials.heading} onChange={(heading) => setContent((current) => ({ ...current, testimonialsSection: { ...current.testimonialsSection, heading } }))} /></Field>
-              {(testimonials.items || []).map((item, index) => (
-                <div className={styles.itemCard} data-dragging={dragging?.group === "testimonials" && dragging.index === index} onDragOver={(event) => allowDrop(event, "testimonials")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "testimonials") setTestimonials(moveItem(testimonials.items || [], dragging.index, index)); setDragging(null); }} key={`testimonial-${index}`}>
-                  <ItemHeader index={index} label={item.author || "New testimonial"} onDragStart={(event) => startDrag(event, "testimonials", index)} onDragEnd={() => setDragging(null)} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} />
+              <SortableList ids={(testimonials.items || []).map((_, index) => `testimonial-${index}`)} onMove={(from, to) => setTestimonials(arrayMove(testimonials.items || [], from, to))}>
+                {(testimonials.items || []).map((item, index) => (
+                <SortableItemCard id={`testimonial-${index}`} index={index} label={item.author || "New testimonial"} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} key={`testimonial-${index}`}>
                   <Field label="Quote"><TextInput multiline value={item.quote} onChange={(quote) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, quote }; setTestimonials(next); }} /></Field>
                   <div className={styles.threeColumns}>
                     <Field label="Name"><TextInput value={item.author} onChange={(author) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, author }; setTestimonials(next); }} /></Field>
@@ -543,8 +711,9 @@ export function AdminEditor({
                     <ImageList single label="Portrait" images={item.portrait ? [item.portrait] : []} onChange={(images) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, portrait: images[0] }; setTestimonials(next); }} />
                     <ImageList single label="Company logo" images={item.companyLogo ? [item.companyLogo] : []} onChange={(images) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, companyLogo: images[0] }; setTestimonials(next); }} />
                   </div>
-                </div>
-              ))}
+                </SortableItemCard>
+                ))}
+              </SortableList>
               <button className={styles.addButton} type="button" onClick={() => setTestimonials([...(testimonials.items || []), { quote: "", author: "New testimonial", role: "", company: "" }])}>+ Add testimonial</button>
             </SectionPanel>
           ) : null}
@@ -552,13 +721,14 @@ export function AdminEditor({
           {active === "faq" ? (
             <SectionPanel title="FAQ" description="Questions shown before the footer.">
               <Field label="Heading"><TextInput value={faq.heading} onChange={(heading) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, heading } }))} /></Field>
-              {(faq.items || []).map((item, index) => (
-                <div className={styles.itemCard} data-dragging={dragging?.group === "faq" && dragging.index === index} onDragOver={(event) => allowDrop(event, "faq")} onDrop={(event) => { event.preventDefault(); if (dragging?.group === "faq") setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: moveItem(current.faqSection?.items || [], dragging.index, index) } })); setDragging(null); }} key={`faq-${index}`}>
-                  <ItemHeader index={index} label={item.question || "New question"} onDragStart={(event) => startDrag(event, "faq", index)} onDragEnd={() => setDragging(null)} onRemove={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: (current.faqSection?.items || []).filter((_, itemIndex) => itemIndex !== index) } }))} />
+              <SortableList ids={(faq.items || []).map((_, index) => `faq-${index}`)} onMove={(from, to) => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: arrayMove(current.faqSection?.items || [], from, to) } }))}>
+                {(faq.items || []).map((item, index) => (
+                <SortableItemCard id={`faq-${index}`} index={index} label={item.question || "New question"} onRemove={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: (current.faqSection?.items || []).filter((_, itemIndex) => itemIndex !== index) } }))} key={`faq-${index}`}>
                   <Field label="Question"><TextInput value={item.question} onChange={(question) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, question }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
                   <Field label="Answer"><TextInput multiline value={item.answer} onChange={(answer) => setContent((current) => { const items = [...(current.faqSection?.items || [])]; items[index] = { ...item, answer }; return { ...current, faqSection: { ...current.faqSection, items } }; })} /></Field>
-                </div>
-              ))}
+                </SortableItemCard>
+                ))}
+              </SortableList>
               <button className={styles.addButton} type="button" onClick={() => setContent((current) => ({ ...current, faqSection: { ...current.faqSection, items: [...(current.faqSection?.items || []), { question: "New question", answer: "" }] } }))}>+ Add question</button>
             </SectionPanel>
           ) : null}
