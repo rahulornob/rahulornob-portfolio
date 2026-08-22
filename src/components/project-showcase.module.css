@@ -63,7 +63,12 @@
   width: max-content;
   height: 600px;
   animation: gallery-forward var(--project-duration) linear infinite;
+  animation-play-state: paused;
   will-change: transform;
+}
+
+.thumbnailTrack[data-speed-ready="true"] {
+  animation-play-state: running;
 }
 
 .thumbnailSet {
@@ -89,6 +94,7 @@
   max-width: none;
   height: 100%;
   object-fit: contain;
+  image-rendering: auto;
   pointer-events: none;
   user-select: none;
 }

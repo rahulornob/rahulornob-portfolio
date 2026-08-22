@@ -90,11 +90,6 @@ function ThumbnailSet({
         const thumbnailStyle = {
           "--thumbnail-ratio": ratio,
         } as CSSProperties;
-        const responsiveSizes = `(max-width: 640px) ${Math.ceil(
-          260 * ratio,
-        )}px, (max-width: 1000px) ${Math.ceil(440 * ratio)}px, ${Math.ceil(
-          600 * ratio,
-        )}px`;
 
         return (
           <div
@@ -108,8 +103,7 @@ function ThumbnailSet({
                 alt={hidden ? "" : thumbnail.alt}
                 width={thumbnail.width}
                 height={thumbnail.height}
-                sizes={responsiveSizes}
-                quality={95}
+                unoptimized
                 draggable={false}
               />
             ) : (
@@ -123,14 +117,35 @@ function ThumbnailSet({
 }
 
 function ProjectCard({ project, speed }: { project: Project; speed: number }) {
+  const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({
     active: false,
     startTime: 0,
     startX: 0,
   });
   const motionStyle = {
-    "--project-duration": `${42 / (speed / 100)}s`,
+    "--project-duration": "60s",
   } as CSSProperties;
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const syncSpeed = () => {
+      const travelDistance = track.scrollWidth * 0.5;
+      if (travelDistance <= 0) return;
+      track.style.setProperty(
+        "--project-duration",
+        `${travelDistance / speed}s`,
+      );
+      track.dataset.speedReady = "true";
+    };
+
+    syncSpeed();
+    const resizeObserver = new ResizeObserver(syncSpeed);
+    resizeObserver.observe(track);
+    return () => resizeObserver.disconnect();
+  }, [speed]);
 
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
     const track = gallery.querySelector(`.${styles.thumbnailTrack}`);
@@ -206,7 +221,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
       >
-        <div className={styles.thumbnailTrack} style={motionStyle}>
+        <div ref={trackRef} className={styles.thumbnailTrack} style={motionStyle}>
           <ThumbnailSet thumbnails={project.thumbnails} />
           <ThumbnailSet thumbnails={project.thumbnails} hidden />
         </div>
