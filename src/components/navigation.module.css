@@ -91,6 +91,7 @@
   width: 4px;
   height: 4px;
   border-radius: 8px;
+  corner-shape: round;
   background: #ffffff;
   transform-origin: center;
   transition:

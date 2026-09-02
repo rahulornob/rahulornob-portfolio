@@ -207,6 +207,7 @@
   flex: none;
   padding: 0;
   border-radius: 50%;
+  corner-shape: round;
   background: #ffffff;
   cursor: pointer;
   opacity: 0.2;

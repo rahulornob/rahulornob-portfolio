@@ -91,6 +91,7 @@
   flex: none;
   place-items: center;
   border-radius: 50%;
+  corner-shape: round;
   transition:
     background-color 320ms ease,
     transform 560ms cubic-bezier(0.16, 1, 0.3, 1);

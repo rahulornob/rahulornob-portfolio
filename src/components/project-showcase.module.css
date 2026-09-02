@@ -143,6 +143,7 @@
   justify-content: center;
   padding: 10px 12px;
   border-radius: 44px;
+  corner-shape: round;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.05),
