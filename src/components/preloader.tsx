@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./preloader.module.css";
 
 export type PreloaderItem = {
@@ -9,7 +9,7 @@ export type PreloaderItem = {
   url: string;
 };
 
-const FRAME_INTERVAL = 360;
+const FRAME_INTERVAL = 480;
 const DURATION = 3200;
 
 export function Preloader({ items }: { items: PreloaderItem[] }) {
@@ -17,6 +17,7 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
     ? items.slice(0, 8)
     : [{ label: "Portfolio", url: "/images/hero.png" }];
   const [activeIndex, setActiveIndex] = useState(0);
+  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -34,7 +35,10 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
       ? undefined
       : window.setTimeout(() => {
           frameTimer = window.setInterval(() => {
-            setActiveIndex((current) => (current + 1) % reel.length);
+            setActiveIndex((current) => {
+              setPreviousIndex(current);
+              return (current + 1) % reel.length;
+            });
           }, FRAME_INTERVAL);
         }, 430);
     const closeTimer = window.setTimeout(finish, duration);
@@ -65,8 +69,7 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
           <div className={styles.reel}>
             {reel.map((item, index) => (
               <div
-                className={`${styles.frame} ${index === activeIndex ? styles.activeFrame : ""}`}
-                style={{ "--frame-rotation": `${(index - 3) * 0.35}deg` } as CSSProperties}
+                className={`${styles.frame} ${index === previousIndex && index !== activeIndex ? styles.previousFrame : ""} ${index === activeIndex ? styles.activeFrame : ""}`}
                 key={`${item.url}-${index}`}
               >
                 <Image
