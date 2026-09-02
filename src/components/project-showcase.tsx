@@ -180,6 +180,16 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     getGalleryAnimation(gallery)?.updatePlaybackRate(playbackRate);
   };
 
+  const updateDragCue = (
+    gallery: HTMLDivElement,
+    clientX: number,
+    clientY: number,
+  ) => {
+    const bounds = gallery.getBoundingClientRect();
+    gallery.style.setProperty("--drag-x", `${clientX - bounds.left}px`);
+    gallery.style.setProperty("--drag-y", `${clientY - bounds.top}px`);
+  };
+
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) {
       return;
@@ -199,6 +209,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    updateDragCue(event.currentTarget, event.clientX, event.clientY);
     if (!dragRef.current.active) return;
 
     const gallery = event.currentTarget;
@@ -237,7 +248,10 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         className={styles.gallery}
         role="region"
         aria-label={`${project.title} image gallery. Drag left or right to browse.`}
-        onPointerEnter={(event) => updateGallerySpeed(event.currentTarget, 0.5)}
+        onPointerEnter={(event) => {
+          updateDragCue(event.currentTarget, event.clientX, event.clientY);
+          updateGallerySpeed(event.currentTarget, 0.5);
+        }}
         onPointerLeave={(event) => {
           if (!dragRef.current.active) updateGallerySpeed(event.currentTarget, 1);
         }}
@@ -246,6 +260,20 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
       >
+        <div className={styles.dragCue} aria-hidden="true">
+          <span className={styles.dragArrow}>
+            <svg viewBox="0 0 12 12">
+              <path d="m7.5 2.5-3.5 3.5 3.5 3.5" />
+            </svg>
+          </span>
+          <span className={styles.dragLabel}>Drag</span>
+          <span className={styles.dragArrow}>
+            <svg viewBox="0 0 12 12">
+              <path d="m4.5 2.5 3.5 3.5-3.5 3.5" />
+            </svg>
+          </span>
+        </div>
+
         <div ref={trackRef} className={styles.thumbnailTrack} style={motionStyle}>
           <ThumbnailSet thumbnails={project.thumbnails} hidden />
           <ThumbnailSet thumbnails={project.thumbnails} />
