@@ -58,8 +58,7 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
     <div className={styles.preloader} aria-hidden="true">
       <div className={styles.stage}>
         <div className={`${styles.sideCopy} ${styles.sideCopyLeft}`}>
-          <span>Selected</span>
-          <strong>Work</strong>
+          <span>rahulornob</span>
         </div>
 
         <div className={styles.reelWrap}>
@@ -84,15 +83,10 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
         </div>
 
         <div className={`${styles.sideCopy} ${styles.sideCopyRight}`}>
-          <span>Rahul</span>
-          <strong>Ornob</strong>
+          <span>portfolio 2026</span>
         </div>
       </div>
 
-      <div className={styles.cornerMeta}>
-        <span>Design × Code</span>
-        <span>Portfolio / 2026</span>
-      </div>
     </div>
   );
 }

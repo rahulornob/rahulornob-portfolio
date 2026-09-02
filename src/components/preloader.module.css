@@ -23,23 +23,15 @@
 }
 
 .sideCopy {
-  display: grid;
-  line-height: 0.86;
-  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .sideCopy span {
-  color: rgba(17, 17, 17, 0.42);
-  font-size: clamp(12px, 1.05vw, 16px);
-  font-weight: 500;
-  letter-spacing: 0.22em;
-}
-
-.sideCopy strong {
-  margin-top: 10px;
-  font-size: clamp(38px, 5.4vw, 86px);
-  font-weight: 430;
-  letter-spacing: -0.065em;
+  color: rgba(17, 17, 17, 0.56);
+  font-size: clamp(12px, 1.1vw, 16px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .sideCopyLeft {
@@ -93,23 +85,6 @@
   opacity: 1;
 }
 
-.cornerMeta {
-  position: absolute;
-  z-index: 3;
-  right: 28px;
-  bottom: 24px;
-  left: 28px;
-  display: flex;
-  justify-content: space-between;
-  color: rgba(17, 17, 17, 0.34);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0;
-  animation: meta-in 1400ms 700ms ease both;
-}
-
 @keyframes scene-swipe {
   0% { clip-path: inset(100% 0 0 0); }
   18% { clip-path: inset(0 0 0 0); }
@@ -139,10 +114,6 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes meta-in {
-  to { opacity: 1; }
-}
-
 @media (max-width: 900px) {
   .stage {
     grid-template-columns: 1fr minmax(280px, 500px) 1fr;
@@ -150,9 +121,6 @@
     padding-inline: 28px;
   }
 
-  .sideCopy strong {
-    font-size: clamp(30px, 6vw, 52px);
-  }
 }
 
 @media (max-width: 700px) {
@@ -177,11 +145,9 @@
     line-height: 1;
   }
 
-  .sideCopy span,
-  .sideCopy strong {
-    margin: 0;
+  .sideCopy span {
     font-size: 11px;
-    letter-spacing: 0.16em;
+    letter-spacing: -0.01em;
   }
 
   .sideCopyLeft { left: 20px; }
@@ -191,19 +157,13 @@
     border-radius: 24px;
   }
 
-  .cornerMeta {
-    right: 20px;
-    bottom: 18px;
-    left: 20px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .preloader,
   .stage,
   .sideCopy,
-  .reel,
-  .cornerMeta {
+  .reel {
     animation-duration: 700ms;
     animation-delay: 0ms;
   }
