@@ -121,8 +121,10 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragCueRef = useRef<HTMLDivElement>(null);
   const dragCueMotionRef = useRef({
+    currentX: 0,
+    currentY: 0,
+    lastFrame: 0,
     raf: 0,
-    revealRaf: 0,
     targetX: 0,
     targetY: 0,
   });
@@ -180,10 +182,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
 
   useEffect(() => {
     const motion = dragCueMotionRef.current;
-    return () => {
-      window.cancelAnimationFrame(motion.raf);
-      window.cancelAnimationFrame(motion.revealRaf);
-    };
+    return () => window.cancelAnimationFrame(motion.raf);
   }, []);
 
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
@@ -196,31 +195,50 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   };
 
   const updateDragCue = (
-    gallery: HTMLDivElement,
     clientX: number,
     clientY: number,
     snap = false,
   ) => {
-    const bounds = gallery.getBoundingClientRect();
     const cue = dragCueRef.current;
     const motion = dragCueMotionRef.current;
     if (!cue) return;
 
-    motion.targetX = clientX - bounds.left;
-    motion.targetY = clientY - bounds.top;
+    motion.targetX = clientX;
+    motion.targetY = clientY;
 
     if (snap) {
       window.cancelAnimationFrame(motion.raf);
       motion.raf = 0;
+      motion.lastFrame = 0;
+      motion.currentX = motion.targetX;
+      motion.currentY = motion.targetY;
       cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
       return;
     }
 
     if (motion.raf) return;
-    motion.raf = window.requestAnimationFrame(() => {
-      cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
-      motion.raf = 0;
-    });
+    const followPointer = (time: number) => {
+      const elapsed = motion.lastFrame ? Math.min(time - motion.lastFrame, 32) : 16;
+      const ease = 1 - Math.exp(-elapsed / 72);
+      const dx = motion.targetX - motion.currentX;
+      const dy = motion.targetY - motion.currentY;
+      motion.currentX += dx * ease;
+      motion.currentY += dy * ease;
+      motion.lastFrame = time;
+      cue.style.transform = `translate3d(${motion.currentX}px, ${motion.currentY}px, 0) translate(-50%, -50%)`;
+
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        motion.raf = window.requestAnimationFrame(followPointer);
+      } else {
+        motion.currentX = motion.targetX;
+        motion.currentY = motion.targetY;
+        cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
+        motion.lastFrame = 0;
+        motion.raf = 0;
+      }
+    };
+
+    motion.raf = window.requestAnimationFrame(followPointer);
   };
 
   const showDragCue = (
@@ -228,22 +246,11 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     clientX: number,
     clientY: number,
   ) => {
-    const motion = dragCueMotionRef.current;
-    window.cancelAnimationFrame(motion.revealRaf);
-    delete gallery.dataset.cueVisible;
-    updateDragCue(gallery, clientX, clientY, true);
-    motion.revealRaf = window.requestAnimationFrame(() => {
-      motion.revealRaf = window.requestAnimationFrame(() => {
-        if (gallery.matches(":hover")) gallery.dataset.cueVisible = "true";
-        motion.revealRaf = 0;
-      });
-    });
+    updateDragCue(clientX, clientY, true);
+    gallery.dataset.cueVisible = "true";
   };
 
   const hideDragCue = (gallery: HTMLDivElement) => {
-    const motion = dragCueMotionRef.current;
-    window.cancelAnimationFrame(motion.revealRaf);
-    motion.revealRaf = 0;
     delete gallery.dataset.cueVisible;
   };
 
@@ -266,7 +273,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    updateDragCue(event.currentTarget, event.clientX, event.clientY);
+    updateDragCue(event.clientX, event.clientY);
     if (!dragRef.current.active) return;
 
     const gallery = event.currentTarget;
