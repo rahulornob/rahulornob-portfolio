@@ -34,9 +34,9 @@
   overflow: hidden;
   padding: 8px;
   border-radius: 12px;
-  background: transparent;
-  -webkit-backdrop-filter: blur(100px) saturate(140%);
-  backdrop-filter: blur(100px) saturate(140%);
+  background: rgba(17, 17, 17, 0.68);
+  -webkit-backdrop-filter: blur(48px) saturate(170%);
+  backdrop-filter: blur(48px) saturate(170%);
   box-shadow: 0 4px 24px rgba(17, 17, 17, 0.32);
 }
 
@@ -46,7 +46,12 @@
   z-index: 0;
   inset: 0;
   border-radius: inherit;
-  background: rgba(17, 17, 17, 0.8);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.015) 48%,
+    rgba(0, 0, 0, 0.06)
+  );
   content: "";
   pointer-events: none;
 }
@@ -161,9 +166,9 @@
   overflow: hidden;
   padding: 8px;
   border-radius: 12px;
-  background: transparent;
-  -webkit-backdrop-filter: blur(100px) saturate(140%);
-  backdrop-filter: blur(100px) saturate(140%);
+  background: rgba(17, 17, 17, 0.68);
+  -webkit-backdrop-filter: blur(48px) saturate(170%);
+  backdrop-filter: blur(48px) saturate(170%);
   box-shadow: 0 18px 56px rgba(17, 17, 17, 0.28);
   opacity: 0;
   visibility: hidden;
