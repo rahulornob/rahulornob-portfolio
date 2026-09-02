@@ -42,9 +42,6 @@
 }
 
 .gallery {
-  --drag-x: 50%;
-  --drag-y: 50%;
-
   position: relative;
   width: 1200px;
   height: 600px;
@@ -68,12 +65,11 @@
   gap: 4px;
   opacity: 0;
   pointer-events: none;
-  translate: calc(var(--drag-x) - 50%) calc(var(--drag-y) - 50%);
   scale: 0.82;
   transition:
     opacity 160ms ease,
     scale 350ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: translate, scale;
+  will-change: transform, scale;
 }
 
 .gallery:hover .dragCue {
@@ -91,8 +87,8 @@
   place-items: center;
   border-radius: 999px;
   corner-shape: round;
-  background: #ff4b16;
-  color: #ffffff;
+  background: #ffffff;
+  color: #111111;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 }
 

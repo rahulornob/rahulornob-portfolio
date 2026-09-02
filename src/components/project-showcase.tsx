@@ -119,6 +119,15 @@ function ThumbnailSet({
 function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   const galleryRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const dragCueRef = useRef<HTMLDivElement>(null);
+  const dragCueMotionRef = useRef({
+    currentX: 0,
+    currentY: 0,
+    initialized: false,
+    raf: 0,
+    targetX: 0,
+    targetY: 0,
+  });
   const dragRef = useRef({
     active: false,
     startTime: 0,
@@ -171,6 +180,11 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     return () => visibilityObserver.disconnect();
   }, []);
 
+  useEffect(() => {
+    const motion = dragCueMotionRef.current;
+    return () => window.cancelAnimationFrame(motion.raf);
+  }, []);
+
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
     const track = gallery.querySelector(`.${styles.thumbnailTrack}`);
     return track?.getAnimations()[0] ?? null;
@@ -184,10 +198,40 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     gallery: HTMLDivElement,
     clientX: number,
     clientY: number,
+    snap = false,
   ) => {
     const bounds = gallery.getBoundingClientRect();
-    gallery.style.setProperty("--drag-x", `${clientX - bounds.left}px`);
-    gallery.style.setProperty("--drag-y", `${clientY - bounds.top}px`);
+    const cue = dragCueRef.current;
+    const motion = dragCueMotionRef.current;
+    if (!cue) return;
+
+    motion.targetX = clientX - bounds.left;
+    motion.targetY = clientY - bounds.top;
+
+    if (!motion.initialized || snap) {
+      motion.currentX = motion.targetX;
+      motion.currentY = motion.targetY;
+      motion.initialized = true;
+      cue.style.transform = `translate3d(${motion.currentX}px, ${motion.currentY}px, 0) translate(-50%, -50%)`;
+      return;
+    }
+
+    if (motion.raf) return;
+    const followPointer = () => {
+      const dx = motion.targetX - motion.currentX;
+      const dy = motion.targetY - motion.currentY;
+      motion.currentX += dx * 0.24;
+      motion.currentY += dy * 0.24;
+      cue.style.transform = `translate3d(${motion.currentX}px, ${motion.currentY}px, 0) translate(-50%, -50%)`;
+
+      if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+        motion.raf = window.requestAnimationFrame(followPointer);
+      } else {
+        motion.raf = 0;
+      }
+    };
+
+    motion.raf = window.requestAnimationFrame(followPointer);
   };
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -238,6 +282,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
 
     const isMouseHover =
       event.pointerType === "mouse" && event.currentTarget.matches(":hover");
+    if (!isMouseHover) dragCueMotionRef.current.initialized = false;
     updateGallerySpeed(event.currentTarget, isMouseHover ? 0.5 : 1);
   };
 
@@ -249,18 +294,21 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         role="region"
         aria-label={`${project.title} image gallery. Drag left or right to browse.`}
         onPointerEnter={(event) => {
-          updateDragCue(event.currentTarget, event.clientX, event.clientY);
+          updateDragCue(event.currentTarget, event.clientX, event.clientY, true);
           updateGallerySpeed(event.currentTarget, 0.5);
         }}
         onPointerLeave={(event) => {
-          if (!dragRef.current.active) updateGallerySpeed(event.currentTarget, 1);
+          if (!dragRef.current.active) {
+            dragCueMotionRef.current.initialized = false;
+            updateGallerySpeed(event.currentTarget, 1);
+          }
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
       >
-        <div className={styles.dragCue} aria-hidden="true">
+        <div ref={dragCueRef} className={styles.dragCue} aria-hidden="true">
           <span className={styles.dragArrow}>
             <svg viewBox="0 0 12 12">
               <path d="m7.5 2.5-3.5 3.5 3.5 3.5" />
