@@ -121,9 +121,6 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragCueRef = useRef<HTMLDivElement>(null);
   const dragCueMotionRef = useRef({
-    currentX: 0,
-    currentY: 0,
-    initialized: false,
     raf: 0,
     targetX: 0,
     targetY: 0,
@@ -208,30 +205,18 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
     motion.targetX = clientX - bounds.left;
     motion.targetY = clientY - bounds.top;
 
-    if (!motion.initialized || snap) {
-      motion.currentX = motion.targetX;
-      motion.currentY = motion.targetY;
-      motion.initialized = true;
-      cue.style.transform = `translate3d(${motion.currentX}px, ${motion.currentY}px, 0) translate(-50%, -50%)`;
+    if (snap) {
+      window.cancelAnimationFrame(motion.raf);
+      motion.raf = 0;
+      cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
       return;
     }
 
     if (motion.raf) return;
-    const followPointer = () => {
-      const dx = motion.targetX - motion.currentX;
-      const dy = motion.targetY - motion.currentY;
-      motion.currentX += dx * 0.24;
-      motion.currentY += dy * 0.24;
-      cue.style.transform = `translate3d(${motion.currentX}px, ${motion.currentY}px, 0) translate(-50%, -50%)`;
-
-      if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
-        motion.raf = window.requestAnimationFrame(followPointer);
-      } else {
-        motion.raf = 0;
-      }
-    };
-
-    motion.raf = window.requestAnimationFrame(followPointer);
+    motion.raf = window.requestAnimationFrame(() => {
+      cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
+      motion.raf = 0;
+    });
   };
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -282,7 +267,6 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
 
     const isMouseHover =
       event.pointerType === "mouse" && event.currentTarget.matches(":hover");
-    if (!isMouseHover) dragCueMotionRef.current.initialized = false;
     updateGallerySpeed(event.currentTarget, isMouseHover ? 0.5 : 1);
   };
 
@@ -299,7 +283,6 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         }}
         onPointerLeave={(event) => {
           if (!dragRef.current.active) {
-            dragCueMotionRef.current.initialized = false;
             updateGallerySpeed(event.currentTarget, 1);
           }
         }}
