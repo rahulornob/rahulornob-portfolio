@@ -9,7 +9,7 @@ export type PreloaderItem = {
   url: string;
 };
 
-const FRAME_INTERVAL = 145;
+const FRAME_INTERVAL = 360;
 const DURATION = 3200;
 
 export function Preloader({ items }: { items: PreloaderItem[] }) {
@@ -54,13 +54,8 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
 
   if (!visible) return null;
 
-  const activeItem = reel[activeIndex];
-
   return (
     <div className={styles.preloader} aria-hidden="true">
-      <div className={styles.grain} />
-      <div className={styles.swipeEdge} />
-
       <div className={styles.stage}>
         <div className={`${styles.sideCopy} ${styles.sideCopyLeft}`}>
           <span>Selected</span>
@@ -85,15 +80,7 @@ export function Preloader({ items }: { items: PreloaderItem[] }) {
                 />
               </div>
             ))}
-            <div className={styles.reelFlash} />
           </div>
-
-          <div className={styles.reelMeta}>
-            <span>{activeItem?.label || "Selected project"}</span>
-            <span>{String(activeIndex + 1).padStart(2, "0")} / {String(reel.length).padStart(2, "0")}</span>
-          </div>
-
-          <div className={styles.progress}><span /></div>
         </div>
 
         <div className={`${styles.sideCopy} ${styles.sideCopyRight}`}>
