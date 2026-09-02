@@ -72,7 +72,7 @@
   will-change: transform, scale, opacity;
 }
 
-.gallery:hover .dragCue {
+.gallery[data-cue-visible="true"] .dragCue {
   opacity: 1;
   scale: 1;
 }

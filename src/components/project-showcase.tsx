@@ -122,6 +122,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
   const dragCueRef = useRef<HTMLDivElement>(null);
   const dragCueMotionRef = useRef({
     raf: 0,
+    revealRaf: 0,
     targetX: 0,
     targetY: 0,
   });
@@ -179,7 +180,10 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
 
   useEffect(() => {
     const motion = dragCueMotionRef.current;
-    return () => window.cancelAnimationFrame(motion.raf);
+    return () => {
+      window.cancelAnimationFrame(motion.raf);
+      window.cancelAnimationFrame(motion.revealRaf);
+    };
   }, []);
 
   const getGalleryAnimation = (gallery: HTMLDivElement) => {
@@ -217,6 +221,30 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
       cue.style.transform = `translate3d(${motion.targetX}px, ${motion.targetY}px, 0) translate(-50%, -50%)`;
       motion.raf = 0;
     });
+  };
+
+  const showDragCue = (
+    gallery: HTMLDivElement,
+    clientX: number,
+    clientY: number,
+  ) => {
+    const motion = dragCueMotionRef.current;
+    window.cancelAnimationFrame(motion.revealRaf);
+    delete gallery.dataset.cueVisible;
+    updateDragCue(gallery, clientX, clientY, true);
+    motion.revealRaf = window.requestAnimationFrame(() => {
+      motion.revealRaf = window.requestAnimationFrame(() => {
+        if (gallery.matches(":hover")) gallery.dataset.cueVisible = "true";
+        motion.revealRaf = 0;
+      });
+    });
+  };
+
+  const hideDragCue = (gallery: HTMLDivElement) => {
+    const motion = dragCueMotionRef.current;
+    window.cancelAnimationFrame(motion.revealRaf);
+    motion.revealRaf = 0;
+    delete gallery.dataset.cueVisible;
   };
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -278,10 +306,11 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         role="region"
         aria-label={`${project.title} image gallery. Drag left or right to browse.`}
         onPointerEnter={(event) => {
-          updateDragCue(event.currentTarget, event.clientX, event.clientY, true);
+          showDragCue(event.currentTarget, event.clientX, event.clientY);
           updateGallerySpeed(event.currentTarget, 0.5);
         }}
         onPointerLeave={(event) => {
+          hideDragCue(event.currentTarget);
           if (!dragRef.current.active) {
             updateGallerySpeed(event.currentTarget, 1);
           }
