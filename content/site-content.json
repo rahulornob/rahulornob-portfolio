@@ -9,6 +9,7 @@
     "heading": "5+ years in, I’m faster at finding what matters, better at knowing what doesn’t, and still annoyingly picky about the details people actually notice."
   },
   "projectsHeading": "A selection\nof things I’ve made",
+  "projectsCarouselSpeed": 50,
   "projects": [
     {
       "title": "NowHealth — Brand and launch website for performance-focused health lab",
@@ -20,7 +21,759 @@
       ],
       "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
       "autoplayDuration": 42,
-      "images": []
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen",
+          "url": "/media/1787435260268-b34bf2a4-acce-41e3-8624-21f7a2f4a7dc.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-1",
+          "url": "/media/1787435259941-3992d653-3bca-4a74-849d-074f3fb4fc76.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-2",
+          "url": "/media/1787435259969-acc0af44-517c-4c92-b4ca-1d0d0879fc57.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-3",
+          "url": "/media/1787435259984-d94cce71-d035-4c7d-8fb2-ab523b5898f2.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-4",
+          "url": "/media/1787435260001-74ac4b36-98d2-460f-ae96-bea6136a292b.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-5",
+          "url": "/media/1787435260019-f3374552-e65b-4261-a36a-566ef4bd768e.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-6",
+          "url": "/media/1787435260040-b6fbde14-7ab4-49bc-a9f6-abc5f0d1037a.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-7",
+          "url": "/media/1787435260055-19b479fc-7689-42fc-8906-cb124a17e4f9.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-8",
+          "url": "/media/1787435260072-0c5db77e-92ef-4f7b-894d-e8a459e110bb.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-9",
+          "url": "/media/1787435260087-7d301c32-45fd-4d84-a1df-1307131eb363.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-10",
+          "url": "/media/1787435260101-85ef13ae-a06f-48a6-8db7-279eb81030b8.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-11",
+          "url": "/media/1787435260116-5e7d45c6-0ec0-4817-a893-1123d21ccdd0.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-12",
+          "url": "/media/1787435260130-6d0458a6-5587-419e-942e-fc48345831da.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-13",
+          "url": "/media/1787435260142-4088bf25-41f6-47d4-8521-9e60a040d548.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-14",
+          "url": "/media/1787435260155-df023862-41c1-4b98-8a4f-222011f5dd8f.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-15",
+          "url": "/media/1787435260171-c3991987-0940-4e60-87f3-e425f2cf911b.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-16",
+          "url": "/media/1787435260187-b9ff8e6c-2fee-4ab9-9e3f-539589bc8b03.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-17",
+          "url": "/media/1787435260207-8f282c2f-a31c-4d33-918b-1233fa043c18.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-18",
+          "url": "/media/1787435260219-715a0613-f2fb-43b0-bd02-65c2941924ff.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-19",
+          "url": "/media/1787435260231-f37e9dfe-02c5-4f6b-8b8e-7c6bc96bc77e.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-20",
+          "url": "/media/1787435260244-8964c4d9-117c-4c6c-913b-9b6dbd4ce6dd.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Now Health - screen-21",
+          "url": "/media/1787435260257-6531fb28-abf2-417e-8b0a-590ec181e161.jpg"
+        }
+      ]
+    },
+    {
+      "title": "JiniHome",
+      "slug": "jinihome",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "webdesign",
+        "uidesign"
+      ],
+      "autoplayDuration": 42,
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 1",
+          "url": "/media/1787435308872-3e6a48b0-6caf-4619-bf40-23849135bd70.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 2",
+          "url": "/media/1787435308895-705ebe47-1904-4b45-b09f-e4bc5c647f8f.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 3",
+          "url": "/media/1787435308915-d6d72c71-92d3-4c6a-a878-140b0190e471.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 4",
+          "url": "/media/1787435308935-be45f510-65dd-4b68-97c0-9129b86278d1.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 5",
+          "url": "/media/1787435308957-504c970f-e7da-429f-ae98-30cc7a1d8cf9.jpg"
+        },
+        {
+          "width": 728,
+          "height": 1200,
+          "alt": "jini - screen 6",
+          "url": "/media/1787435308970-f7efc03a-013c-4021-999a-cf4d52cb9fa0.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 7",
+          "url": "/media/1787435308991-c0e84148-bd36-4636-ae6b-ff3e0dc539b2.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 8",
+          "url": "/media/1787435309010-0a315e80-af85-4ac4-bfdd-b0913332a23c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 9",
+          "url": "/media/1787435309027-318ae925-330d-4641-809a-85cf79e51e49.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 10",
+          "url": "/media/1787435309045-faa52309-4ad3-4f67-93e7-202d29879373.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 11",
+          "url": "/media/1787435309061-4c076878-5179-4be1-a875-1af26aba0e05.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 12",
+          "url": "/media/1787435309079-2bd004cc-d71d-4e3f-8bdf-b95a0ef42742.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 13",
+          "url": "/media/1787435309094-4deee552-d475-439a-9dce-065357bdefaa.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 14",
+          "url": "/media/1787435309111-95ae3698-4ed3-46e2-a234-a2bcf4e88acb.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "jini - screen 15",
+          "url": "/media/1787435309125-31f47fa7-a07d-4af7-a817-6edeff8c0842.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Endbrackets",
+      "slug": "endbrackets",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "autoplayDuration": 42,
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 1",
+          "url": "/media/1787435327999-01d624ab-fea1-4102-bfc9-a2a8e46d3e83.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 2",
+          "url": "/media/1787435328031-a26891c1-cdee-42be-816b-bbb43d9db3fb.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 3",
+          "url": "/media/1787435328046-f8e906c1-2007-441d-8e7c-50a4151af3ee.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 4",
+          "url": "/media/1787435328063-eecf5318-7061-4d09-bd5b-614c53fb3811.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 5",
+          "url": "/media/1787435328081-ca28a1ac-933b-4ecb-b972-ac95204cb576.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 6",
+          "url": "/media/1787435328096-ab608166-5a72-4231-8b6e-6f0c352efbd0.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 7",
+          "url": "/media/1787435328119-c2819082-5a44-48f4-9101-8e1e0759a8fa.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 8",
+          "url": "/media/1787435328132-36ab562c-2dce-4fd6-b173-c877cb404a66.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "EndBrackets - screen 9",
+          "url": "/media/1787435328144-de752d38-440b-444d-bb6f-93365e204e4c.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Milvik",
+      "slug": "milvik-bangladesh",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "webdesign",
+        "uidesign",
+        "redesign"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 1",
+          "url": "/media/1787435348227-0e1a2a8d-29e0-4e5b-ba32-0dcb2bc3318c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 2",
+          "url": "/media/1787435348251-62483048-0720-434e-9a13-5d5625137eab.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 3",
+          "url": "/media/1787435348267-f1b35d36-6228-4946-8e66-5d99d9b6c1a1.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 4",
+          "url": "/media/1787435348292-84c618f7-c902-4de0-ac19-ba0c2605e2c9.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 5",
+          "url": "/media/1787435348311-f6bedb47-bf37-4b03-830f-8b6e2714054c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 6",
+          "url": "/media/1787435348324-b94c7aaf-f035-4d06-85d7-7bae0da006de.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 8",
+          "url": "/media/1787435348368-a8c099ac-64e5-449a-bfaf-26314c47c530.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 9",
+          "url": "/media/1787435348391-d93fa237-cd6d-4598-a3f6-e23da6d01e46.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 10",
+          "url": "/media/1787435348414-58a1252f-e019-4dd6-96c4-c05cea8721fc.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 11",
+          "url": "/media/1787435348434-facc681e-703b-418c-a7c5-bdb7be158415.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 12",
+          "url": "/media/1787435348452-010b89a7-3892-46db-a731-422acf1ca775.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 13",
+          "url": "/media/1787435348473-3451edf8-00a2-44ae-855a-0b8a4ff4bc2a.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Milvik - screen 14",
+          "url": "/media/1787436115492-b8e9eb48-0de6-4bbf-bc12-6abcb84ed43d.jpg"
+        }
+      ]
+    },
+    {
+      "title": "SimplyRealMarket",
+      "slug": "simply-real-market",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-1",
+          "url": "/media/1787435443210-548401a5-cbf3-4f03-b363-cc35c2593191.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-2",
+          "url": "/media/1787435443237-7d230c7b-a84d-400d-b977-0ac4241ada5b.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-3",
+          "url": "/media/1787435443262-00ce52be-6f61-4974-b2a1-c0aa820de7fd.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-4",
+          "url": "/media/1787435443282-3163a717-051c-4322-85ad-134c1d0ec251.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-5",
+          "url": "/media/1787435443309-7716ffcb-e088-4954-987b-cff896568134.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-6",
+          "url": "/media/1787435443328-d4f78ef6-33c0-4583-9066-ab5ef810fa83.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-7",
+          "url": "/media/1787435443345-6133b74c-75d1-43fc-b16f-da326d6ad8d1.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-8",
+          "url": "/media/1787435443362-acc5a586-eee4-4cb0-af00-689656fc5280.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-9",
+          "url": "/media/1787435443376-786ccb1b-6bf8-4bb1-8325-05ef888625c4.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-10",
+          "url": "/media/1787435443389-31586337-887e-496f-896e-3cec3b857d26.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-11",
+          "url": "/media/1787435443402-c8816495-50b8-4621-b5c1-ca060ba46fdc.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-12",
+          "url": "/media/1787435443417-3e3bd5fb-03e6-4d4f-988a-2ae8a2ba3af0.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen-13",
+          "url": "/media/1787435443434-994ae131-e94d-4527-b96d-7d963342a0a2.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Simply Real Market - screen",
+          "url": "/media/1787435443447-a92baebb-eae6-47ef-b94c-c8156117f509.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Stotles",
+      "slug": "stotles",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 1",
+          "url": "/media/1787435477279-72ecce79-7a12-4770-85ab-11ee3198b27c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 2",
+          "url": "/media/1787435477304-52a2fb52-7e95-420d-97ae-11b01bc80c38.jpg"
+        },
+        {
+          "width": 1650,
+          "height": 1200,
+          "alt": "Stotles - screen 3",
+          "url": "/media/1787435477324-574e76cf-6883-4f3d-ab82-68e09fe0a3e3.jpg"
+        },
+        {
+          "width": 1650,
+          "height": 1200,
+          "alt": "Stotles - screen 4",
+          "url": "/media/1787435477347-1f040aae-9ad3-4780-ae15-2f8cd1e0e8aa.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 5",
+          "url": "/media/1787435477370-5a72daa4-ff60-40ad-b0de-0de1ca99f794.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 6",
+          "url": "/media/1787435477388-3ab4bb57-c9dc-4bc1-94a6-7e72c4770677.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 7",
+          "url": "/media/1787435477405-7ebc30c8-a127-4c5c-b612-5e45204991c6.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 8",
+          "url": "/media/1787435477422-5b73c4d7-f504-4810-b124-85dd5a85f86c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Stotles - screen 9",
+          "url": "/media/1787435477435-673e78b7-166e-4493-8abf-e062db2cbb18.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Veneto Kitchen",
+      "slug": "veneto-kitchen",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 1",
+          "url": "/media/1787435494752-777c5f9a-1819-475f-afcb-1509c528d944.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 2",
+          "url": "/media/1787435494776-58f0064b-5f69-4ba6-bdee-c1200f1e9fca.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 3",
+          "url": "/media/1787435494793-f74b0f01-a81a-4bd0-ae93-8c3242159ad9.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 4",
+          "url": "/media/1787435494810-b14cd379-0bdd-4407-a4ff-62b98c436937.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 5",
+          "url": "/media/1787435494828-32622054-43a2-43b5-80b2-9b9bbc099cac.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 6",
+          "url": "/media/1787435494851-4f453aa5-bafe-4222-b313-e135d6de1191.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 7",
+          "url": "/media/1787435494869-90d5ab43-2214-4a4f-97bc-2bd8047f39e8.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Veneto Kitchen - screen 8",
+          "url": "/media/1787435494880-33a1e92f-5555-4fcc-a821-799c2e02e7de.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Zayed for Good",
+      "slug": "zayed-for-good",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 1",
+          "url": "/media/1787435556970-8bc215fd-c5cd-400a-95f9-4e7e72adf4fe.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 2",
+          "url": "/media/1787435556989-8a2abd0b-4739-4460-822b-5f177f3b8d27.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 3",
+          "url": "/media/1787435557008-1b56975a-0fba-4c89-a75e-2ad826b450cd.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 4",
+          "url": "/media/1787435557031-c8ede3a3-4a80-4601-84e6-b1852fd78bc9.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 5",
+          "url": "/media/1787435557056-da7b6725-06ab-4037-999a-e2d685ba25ca.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 6",
+          "url": "/media/1787435557072-972bc708-031c-440a-8949-776ae59a0323.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 7",
+          "url": "/media/1787435557086-6de83551-ae41-4f27-8bf9-2379eb3ed14c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 8",
+          "url": "/media/1787435557102-0d0f175c-d26f-4a72-923a-405ab1182574.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "Zayed for Good - screen 9",
+          "url": "/media/1787435557115-e349daeb-d747-4dcd-b71c-016b79f7ee5e.jpg"
+        }
+      ]
+    },
+    {
+      "title": "ZENO - Fashion",
+      "slug": "zeno-fashion",
+      "description": "The website was designed to capture early demand and build credibility before launch. It converted initial interest into a growing waitlist while clearly communicating Enroute’s performance-driven positioning.",
+      "tags": [
+        "Web design",
+        "Ul design",
+        "Motion"
+      ],
+      "images": [
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 1",
+          "url": "/media/1787435594557-200570a2-c917-45d9-bf3b-215eee03de3d.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 2",
+          "url": "/media/1787435594580-71fb5872-9d30-4817-923a-d00485cf143c.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 3",
+          "url": "/media/1787435594600-7ddcea24-7b8a-4eb9-9cc4-018ad97430ef.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 4",
+          "url": "/media/1787435594627-f2579ebd-5636-4bd8-a771-16bbb6d61e4e.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 5",
+          "url": "/media/1787435594642-e5a94aad-edc8-443b-9793-b65cb34c6afe.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 6",
+          "url": "/media/1787435594659-0ab14721-4be0-49e0-9d9f-0a53bfc8fd91.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 7",
+          "url": "/media/1787435594682-7b2c9ca2-7be0-4fa8-ad5c-80373d3f7d34.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 8",
+          "url": "/media/1787435594697-e76165fd-7fa1-4985-800f-64904350ae7f.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 9",
+          "url": "/media/1787435594714-49ca61ca-12a6-4b49-851f-7e8e0e118bb6.jpg"
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "alt": "ZENO - screen 10",
+          "url": "/media/1787435594729-efa58d3c-140b-48f9-9f0b-9dcbcf4ce0a9.jpg"
+        }
+      ]
     }
   ],
   "servicesSection": {
@@ -145,7 +898,7 @@
     "ctaLabel": "Start conversation",
     "particleText": "rahulornob",
     "locationText": "Based in Dhaka & Serve worldwide.",
-    "copyrightText": "Rahulornob © 2026 All Rights Reserved",
+    "copyrightText": "rahulornob © 2026 All Rights Reserved",
     "sitemap": [
       {
         "label": "Home",
@@ -167,19 +920,19 @@
     "socialLinks": [
       {
         "label": "Linkedin",
-        "url": ""
+        "url": "https://www.linkedin.com/in/rahulornob/"
       },
       {
         "label": "X (Twitter)",
-        "url": ""
-      },
-      {
-        "label": "Instagram",
-        "url": ""
+        "url": "https://x.com/rahulornob"
       },
       {
         "label": "Behance",
-        "url": ""
+        "url": "https://www.behance.net/rahulornob"
+      },
+      {
+        "label": "Dribbble",
+        "url": "https://dribbble.com/rahulornob"
       }
     ]
   }
