@@ -38,14 +38,28 @@ export function Cursor() {
     // loop starts ticking immediately on mount, well before any real
     // pointer event necessarily arrives, so it can't double as "we know
     // where the pointer is" without racing the first move event.
-    const motion = { x: 0, y: 0, targetX: 0, targetY: 0, hasPosition: false, raf: 0 };
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const motion = {
+      x: 0,
+      y: 0,
+      targetX: 0,
+      targetY: 0,
+      hasPosition: false,
+      lastFrame: 0,
+      raf: 0,
+    };
 
-    const follow = () => {
+    const follow = (time: number) => {
       if (motion.hasPosition) {
-        motion.x += (motion.targetX - motion.x) * 0.2;
-        motion.y += (motion.targetY - motion.y) * 0.2;
+        const elapsed = motion.lastFrame
+          ? Math.min(time - motion.lastFrame, 32)
+          : 16;
+        const amount = reduceMotion ? 1 : 1 - Math.exp(-elapsed / 105);
+        motion.x += (motion.targetX - motion.x) * amount;
+        motion.y += (motion.targetY - motion.y) * amount;
         dot.style.transform = `translate3d(${motion.x}px, ${motion.y}px, 0) translate(-50%, -50%)`;
       }
+      motion.lastFrame = time;
       motion.raf = window.requestAnimationFrame(follow);
     };
     motion.raf = window.requestAnimationFrame(follow);

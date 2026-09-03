@@ -7,6 +7,7 @@ import { Faq } from "@/components/faq";
 import { SiteFooter } from "@/components/site-footer";
 import { Preloader } from "@/components/preloader";
 import { Cursor } from "@/components/cursor";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/cms/storage";
 import styles from "./page.module.css";
 
@@ -25,6 +26,7 @@ export default async function Home() {
 
   return (
     <>
+      <SmoothScroll />
       <Cursor />
       <Preloader items={preloaderItems} />
       <main className={styles.page}>
