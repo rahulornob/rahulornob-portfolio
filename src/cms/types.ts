@@ -6,16 +6,29 @@ export type CmsImage = {
 };
 
 export type HeroContent = {
-  backgroundImage?: CmsImage;
+  avatar?: CmsImage;
+  bio?: string[];
   ctaLabel?: string;
-  headline?: string;
-  intro?: string;
+  name?: string;
+  title?: string;
+  wantLabel?: string;
 };
 
 export type AboutContent = {
   eyebrow?: string;
   heading?: string;
   logos?: Array<CmsImage & { name: string }>;
+};
+
+export type NavigationContent = {
+  items?: Array<{ href?: string; label?: string }>;
+  socials?: Array<{ label?: string; url?: string }>;
+};
+
+export type PreloaderContent = {
+  images?: CmsImage[];
+  leftLabel?: string;
+  rightLabel?: string;
 };
 
 export type ProjectContent = {
@@ -42,9 +55,7 @@ export type ServicesContent = {
 
 export type TestimonialContent = {
   author?: string;
-  company?: string;
-  companyLogo?: CmsImage;
-  portrait?: CmsImage;
+  avatar?: CmsImage;
   quote?: string;
   role?: string;
 };
@@ -75,6 +86,8 @@ export type SiteContent = {
   faqSection?: FaqContent;
   footer?: FooterContent;
   hero?: HeroContent;
+  navigation?: NavigationContent;
+  preloader?: PreloaderContent;
   projects?: ProjectContent[];
   projectsCarouselSpeed?: number;
   projectsHeading?: string;

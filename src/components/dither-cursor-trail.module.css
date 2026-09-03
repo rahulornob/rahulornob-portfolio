@@ -1,0 +1,17 @@
+.wrap {
+  position: absolute;
+  inset: 0;
+  /* Above the hero's brand-logo row (z-index 0) so the trail draws
+     straight through it instead of being clipped at its rectangular
+     edge, but below the main text content (z-index 2) so it never
+     draws over readable copy. */
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

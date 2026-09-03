@@ -63,19 +63,6 @@
   white-space: nowrap;
 }
 
-/*
- * Hides the real cursor everywhere while this one is active. This class is
- * applied to <body> from cursor.tsx via styles.cursorActive (so the name
- * below gets the same module hash there and here) - `!important` because
- * plenty of elements on the page (buttons, links) carry their own
- * `cursor: pointer` from the browser's UA stylesheet or component CSS,
- * which would otherwise win over a plain inherited value here.
- */
-.cursorActive,
-.cursorActive * {
-  cursor: none !important;
-}
-
 @media (hover: none), (pointer: coarse) {
   .cursor {
     display: none;

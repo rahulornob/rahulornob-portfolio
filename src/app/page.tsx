@@ -1,11 +1,10 @@
 import { Hero } from "@/components/hero";
-import { About } from "@/components/about";
 import { ProjectShowcase } from "@/components/project-showcase";
 import { Services } from "@/components/services";
 import { Testimonials } from "@/components/testimonials";
 import { Faq } from "@/components/faq";
 import { SiteFooter } from "@/components/site-footer";
-import { Preloader } from "@/components/preloader";
+import { Preloader, type PreloaderItem } from "@/components/preloader";
 import { Cursor } from "@/components/cursor";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/cms/storage";
@@ -15,24 +14,47 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const content = await getSiteContent();
-  const preloaderItems = (content.projects || [])
-    .map((project) => {
-      const image = project.images?.find((item) => item.url);
-      return image?.url
-        ? { label: project.title || "Selected project", url: image.url }
-        : null;
-    })
-    .filter((item): item is { label: string; url: string } => Boolean(item));
+  const customPreloaderImages = (content.preloader?.images || []).filter(
+    (image): image is typeof image & { url: string } => Boolean(image.url),
+  );
+  const preloaderItems: PreloaderItem[] = customPreloaderImages.length
+    ? customPreloaderImages.map((image, index) => ({
+        label: image.alt || `Preloader image ${index + 1}`,
+        url: image.url,
+        width: image.width,
+        height: image.height,
+      }))
+    : (content.projects || [])
+        .map((project): PreloaderItem | null => {
+          const image = project.images?.find((item) => item.url);
+          return image?.url
+            ? {
+                label: project.title || "Selected project",
+                url: image.url,
+                width: image.width,
+                height: image.height,
+              }
+            : null;
+        })
+        .filter((item): item is PreloaderItem => Boolean(item));
 
   return (
     <>
       <SmoothScroll />
       <Cursor />
-      <Preloader items={preloaderItems} />
+      <Preloader
+        items={preloaderItems}
+        leftLabel={content.preloader?.leftLabel}
+        rightLabel={content.preloader?.rightLabel}
+      />
       <main className={styles.page}>
         <div className={styles.content}>
-          <Hero content={content.hero} />
-          <About content={content.about} />
+          <Hero
+            about={content.about}
+            content={content.hero}
+            navigation={content.navigation?.items}
+            socials={content.navigation?.socials}
+          />
           <ProjectShowcase
             carouselSpeed={content.projectsCarouselSpeed}
             heading={content.projectsHeading}

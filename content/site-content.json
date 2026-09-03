@@ -1,12 +1,74 @@
 {
   "hero": {
-    "headline": "Making the internet slightly less annoying.",
-    "intro": "Designing for the web, building when needed, and using AI to move faster without letting it make the creative decisions.",
-    "ctaLabel": "Start project"
+    "name": "Rahul Ornob",
+    "title": "Design Engineer at Musemind",
+    "bio": [
+      "I’m a visual-first designer with 5+ years of experience across web, product, telecom, healthcare, finance, and social impact. I care about sharp interfaces, strong visual direction, and making digital work feel polished without making it harder to use.",
+      "I’ve spent the last few years moving between client work, internal teams, freelance projects, and building my own stuff, which is probably why I like staying close to both design and execution."
+    ],
+    "wantLabel": "Want me on your team?",
+    "ctaLabel": "Let’s talk",
+    "avatar": {
+      "width": 1500,
+      "height": 1500,
+      "alt": "Rahul - 1x1",
+      "url": "/media/1788438642895-36d30044-a104-42d7-b4de-e3aaf1951973.jpg"
+    }
   },
   "about": {
     "eyebrow": "Why me",
     "heading": "5+ years in, I’m faster at finding what matters, better at knowing what doesn’t, and still annoyingly picky about the details people actually notice."
+  },
+  "navigation": {
+    "items": [
+      {
+        "label": "Work",
+        "href": "#work"
+      },
+      {
+        "label": "Services",
+        "href": "#services"
+      },
+      {
+        "label": "About",
+        "href": ""
+      },
+      {
+        "label": "Playground",
+        "href": ""
+      },
+      {
+        "label": "Book a Call",
+        "href": "mailto:hey@rahulornob.com"
+      }
+    ],
+    "socials": [
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/rahulornob/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/rahulornoob/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/madbirdsstudio"
+      },
+      {
+        "label": "Dribbble",
+        "url": "https://dribbble.com/rahulornob"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/rahulornob/"
+      }
+    ]
+  },
+  "preloader": {
+    "leftLabel": "rahulornob",
+    "rightLabel": "design engineer",
+    "images": []
   },
   "projectsHeading": "A selection\nof things I’ve made",
   "projectsCarouselSpeed": 50,
@@ -783,51 +845,91 @@
       {
         "id": "website-design",
         "title": "Website Design",
-        "description": "I design responsive websites from landing pages to full marketing sites, with a strong focus on layout, visual direction, interactions, and usability.",
+        "description": "I design responsive websites, landing pages, and marketing sites that combine strong visual direction with clear UX. The goal is simple: help your business look credible, explain what you do faster, and make it easier for people to take action.",
         "tags": [
-          "Web design",
-          "UI design",
-          "Responsive design"
-        ]
-      },
-      {
-        "id": "design-engineering",
-        "title": "Design Engineering",
-        "description": "I take designs further with interactive prototypes, motion, and AI-assisted workflows, so ideas can be tested and refined before they reach development.",
-        "tags": [
-          "Prototyping",
-          "Interaction",
-          "AI workflow"
+          "WEBSITE DESIGN",
+          "UI DESIGN",
+          "RESPONSIVE WEB DESIGN"
+        ],
+        "images": [
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Website Design - 01",
+            "url": "/media/1788438826857-fc67a206-cd05-480d-ae7d-e5ece473c6a2.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Website Design - 02",
+            "url": "/media/1788438826870-7499c2a0-e831-4c6d-8cd3-18788c164e19.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Website Design - 03",
+            "url": "/media/1788438826882-8d8d4add-c5e1-4fcc-bd2d-990b5d4dadb4.png"
+          }
         ]
       },
       {
         "id": "mobile-app-design",
         "title": "Mobile App Design",
-        "description": "I design mobile interfaces and user flows that are easy to understand, visually polished, and consistent across the full experience.",
+        "description": "I design mobile app interfaces and user flows that feel clear from the first tap. From early screens to polished UI, I focus on usability, visual hierarchy, and making the experience easier for both users and product teams to move forward with.",
         "tags": [
-          "App design",
-          "UI/UX",
-          "Prototyping"
-        ]
-      },
-      {
-        "id": "pitch-deck-design",
-        "title": "Pitch Deck Design",
-        "description": "I turn raw content into clear, well-structured presentations with strong hierarchy, visual storytelling, and slides that are actually easy to follow.",
-        "tags": [
-          "Pitch deck",
-          "Presentation",
-          "Visual design"
+          "MOBILE APP DESIGN",
+          "UI/UX DESIGN",
+          "PROTOTYPING"
+        ],
+        "images": [
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Mobile - 01",
+            "url": "/media/1788438871691-9047c08e-6c2c-4d30-946c-bb9a140c1000.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Mobile - 02",
+            "url": "/media/1788438871706-183c5857-8c13-4249-b501-48c936a3f592.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Mobile - 03",
+            "url": "/media/1788438871723-e423b36d-2fc0-46af-9d51-4463d173307a.png"
+          }
         ]
       },
       {
         "id": "brand-collateral-design",
         "title": "Brand Collateral Design",
-        "description": "I design business cards, banners, booklets, leaflets, and other print materials, keeping everything consistent with the existing brand and ready for production.",
+        "description": "I design business cards, banners, booklets, leaflets, campaign materials, and other brand collateral for digital and print. Everything stays aligned with your existing brand, looks polished, and is prepared for practical use.",
         "tags": [
-          "Print design",
-          "Brand collateral",
-          "Marketing materials"
+          "BRAND COLLATERAL",
+          "PRINT DESIGN",
+          "MARKETING DESIGN"
+        ],
+        "images": [
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Brand - 01",
+            "url": "/media/1788438879504-62ae81d1-5666-4ea5-a074-b9662d85372f.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Brand - 02",
+            "url": "/media/1788438879513-a5dfac58-6909-47d6-9464-ab8b7d30d918.png"
+          },
+          {
+            "width": 338,
+            "height": 420,
+            "alt": "Brand - 03",
+            "url": "/media/1788438879523-4c02f61f-b368-45cb-88ae-cb75059c286b.png"
+          }
         ]
       }
     ]
@@ -836,34 +938,37 @@
     "heading": "Nice things people said",
     "items": [
       {
-        "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
-        "author": "Nothing Rahman",
-        "role": "Product Manager, SaaS Platform",
-        "company": "Cosmos"
+        "quote": "Rahul was consistently reliable across 100+ projects. He understood briefs quickly, moved fast, and delivered work I could trust.",
+        "author": "Shehreen Kamal",
+        "role": "Marketing & Strategic Partnerships",
+        "avatar": {
+          "width": 400,
+          "height": 400,
+          "alt": "Shehreen Kamal lnkdn",
+          "url": "/media/1788467079975-dd43c757-453c-4f57-9d5a-541c5cfe0ea9.jpg"
+        }
       },
       {
-        "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
-        "author": "Nothing Rahman",
-        "role": "Product Manager, SaaS Platform",
-        "company": "Cosmos"
+        "quote": "Rahul is fast, thoughtful, and easy to work with. He consistently turns complex requirements into clear, polished visual work.",
+        "author": "Mofasser Bhuiyan",
+        "role": "Marketing Lead, VisionSpring",
+        "avatar": {
+          "width": 400,
+          "height": 400,
+          "alt": "Mofasser Haider lnkdn",
+          "url": "/media/1788467085801-2328a842-cf7a-4349-9f99-f7fc53c42750.jpg"
+        }
       },
       {
-        "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
-        "author": "Nothing Rahman",
-        "role": "Product Manager, SaaS Platform",
-        "company": "Cosmos"
-      },
-      {
-        "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
-        "author": "Nothing Rahman",
-        "role": "Product Manager, SaaS Platform",
-        "company": "Cosmos"
-      },
-      {
-        "quote": "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
-        "author": "Nothing Rahman",
-        "role": "Product Manager, SaaS Platform",
-        "company": "Cosmos"
+        "quote": "Great to work with. Made sure the job got done and great communication. Would recommend!",
+        "author": "Harbor App",
+        "role": "Marketing Lead",
+        "avatar": {
+          "width": 500,
+          "height": 500,
+          "alt": "harborapp",
+          "url": "/media/1788467354264-9e21d9f7-1731-4a67-9be5-81fe037b95b7.png"
+        }
       }
     ]
   },

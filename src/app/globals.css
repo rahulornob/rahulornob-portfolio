@@ -27,7 +27,6 @@
 
 html {
   background: var(--color-ink);
-  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
@@ -41,6 +40,15 @@ body {
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
   text-rendering: optimizeLegibility;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active *,
+  html:has([data-custom-cursor]),
+  html:has([data-custom-cursor]) * {
+    cursor: none !important;
+  }
 }
 
 button,

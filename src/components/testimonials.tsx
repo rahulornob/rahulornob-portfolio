@@ -272,57 +272,26 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
               aria-hidden={position !== activePosition}
               key={`${realIndex}-${position}`}
             >
-              <div className={styles.portrait}>
-                <Image
-                  src={testimonial.portrait?.url ?? "/testimonials/portrait.png"}
-                  alt={testimonial.author ?? "Client portrait"}
-                  width={testimonial.portrait?.width ?? 1080}
-                  height={testimonial.portrait?.height ?? 1350}
-                  sizes="(max-width: 640px) calc(100vw - 32px), 300px"
-                  quality={95}
-                  draggable={false}
-                />
-              </div>
-
-              <div className={styles.content}>
-                <div className={styles.quoteGroup}>
-                  {testimonial.companyLogo?.url ? (
-                    <div
-                      className={`${styles.logo} ${styles.cmsLogo}`}
-                      aria-label={testimonial.company ?? "Client company"}
-                    >
-                      <Image
-                        src={testimonial.companyLogo.url}
-                        alt=""
-                        width={testimonial.companyLogo.width ?? 120}
-                        height={testimonial.companyLogo.height ?? 40}
-                        quality={95}
-                      />
-                    </div>
-                  ) : (
-                    <div className={styles.logo} aria-label="Cosmos">
-                      <Image
-                        src="/testimonials/cosmos-wordmark.svg"
-                        alt=""
-                        width={98}
-                        height={17}
-                      />
-                      <Image
-                        src="/testimonials/cosmos-mark.svg"
-                        alt=""
-                        width={7}
-                        height={7}
-                      />
-                    </div>
-                  )}
-                  <blockquote>{testimonial.quote}</blockquote>
+              <div className={styles.quoteGroup}>
+                <div className={styles.avatar}>
+                  <Image
+                    src={testimonial.avatar?.url ?? "/testimonials/portrait.png"}
+                    alt=""
+                    width={testimonial.avatar?.width ?? 128}
+                    height={testimonial.avatar?.height ?? 128}
+                    quality={95}
+                    draggable={false}
+                  />
                 </div>
-
-                <footer className={styles.author}>
-                  <cite>{testimonial.author}</cite>
-                  <p>{testimonial.role}</p>
-                </footer>
+                <blockquote className="type-heading-h4-medium">
+                  {testimonial.quote}
+                </blockquote>
               </div>
+
+              <footer className={styles.author}>
+                <cite>{testimonial.author}</cite>
+                <p>{testimonial.role}</p>
+              </footer>
               </article>
             );
           })}

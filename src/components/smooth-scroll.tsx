@@ -8,14 +8,14 @@ export function SmoothScroll() {
     const lenis = new Lenis({
       anchors: true,
       autoRaf: true,
-      autoToggle: true,
-      lerp: 0.14,
-      overscroll: true,
-      respectReducedMotion: true,
-      smoothWheel: true,
-      stopInertiaOnNavigate: true,
-      syncTouch: false,
-      wheelMultiplier: 1,
+      // Scrolling past the footer wraps seamlessly back to the top (and
+      // vice versa from the very top) instead of stopping dead at the
+      // page's edges. Lenis implements this by letting the animated
+      // scroll value grow unbounded and applying it modulo the page's
+      // scroll limit, so the wrap is a continuous motion, not a jump-cut
+      // reset - and scrollTo() (anchor links included) already accounts
+      // for it by taking whichever wrap direction is shorter.
+      infinite: true,
     });
 
     return () => lenis.destroy();

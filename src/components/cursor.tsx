@@ -7,6 +7,7 @@ const INTERACTIVE_SELECTOR = 'a, button, [role="button"], input, textarea, selec
 // Regions that already run their own custom cursor (the project gallery's
 // drag cue) opt out here so the two don't show on top of each other.
 const HIDE_SELECTOR = "[data-cursor-hide]";
+const ACTIVE_CLASS = "custom-cursor-active";
 // Off for now by request - hovering a [data-cursor] element still grows
 // the dot like any other interactive element, it just won't show its
 // text label. Flip this back on to restore the labeled-pill behavior.
@@ -32,7 +33,7 @@ export function Cursor() {
     const dot = dotRef.current;
     if (!dot) return;
 
-    document.body.classList.add(styles.cursorActive);
+    document.documentElement.classList.add(ACTIVE_CLASS);
 
     // hasPosition is distinct from the rAF loop having run at all - the
     // loop starts ticking immediately on mount, well before any real
@@ -49,16 +50,32 @@ export function Cursor() {
       raf: 0,
     };
 
+    const placeImmediately = (clientX: number, clientY: number) => {
+      motion.hasPosition = true;
+      motion.x = clientX;
+      motion.y = clientY;
+      motion.targetX = clientX;
+      motion.targetY = clientY;
+      motion.lastFrame = 0;
+      dot.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
+    };
+
     const follow = (time: number) => {
       if (motion.hasPosition) {
         const elapsed = motion.lastFrame
           ? Math.min(time - motion.lastFrame, 32)
           : 16;
         const amount = reduceMotion ? 1 : 1 - Math.exp(-elapsed / 105);
-        motion.x += (motion.targetX - motion.x) * amount;
-        motion.y += (motion.targetY - motion.y) * amount;
-        dot.style.transform = `translate3d(${motion.x}px, ${motion.y}px, 0) translate(-50%, -50%)`;
+        const dx = motion.targetX - motion.x;
+        const dy = motion.targetY - motion.y;
+
+        if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) {
+          motion.x += dx * amount;
+          motion.y += dy * amount;
+          dot.style.transform = `translate3d(${motion.x}px, ${motion.y}px, 0) translate(-50%, -50%)`;
+        }
       }
+
       motion.lastFrame = time;
       motion.raf = window.requestAnimationFrame(follow);
     };
@@ -68,13 +85,9 @@ export function Cursor() {
       motion.targetX = event.clientX;
       motion.targetY = event.clientY;
       if (!motion.hasPosition) {
-        // Jump straight to the real position instead of easing in from
-        // (0, 0) on the very first move.
-        motion.hasPosition = true;
-        motion.x = event.clientX;
-        motion.y = event.clientY;
-        dot.style.transform = `translate3d(${motion.x}px, ${motion.y}px, 0) translate(-50%, -50%)`;
-        setHidden(false);
+        placeImmediately(event.clientX, event.clientY);
+        const target = event.target as HTMLElement | null;
+        setHidden(Boolean(target?.closest(HIDE_SELECTOR)));
       }
     };
 
@@ -97,7 +110,11 @@ export function Cursor() {
       setLabel(null);
       setHidden(true);
     };
-    const enterWindow = () => setHidden(false);
+    const enterWindow = (event: PointerEvent) => {
+      placeImmediately(event.clientX, event.clientY);
+      const target = document.elementFromPoint(event.clientX, event.clientY);
+      setHidden(Boolean(target?.closest(HIDE_SELECTOR)));
+    };
 
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerover", over);
@@ -110,12 +127,12 @@ export function Cursor() {
       window.removeEventListener("pointerover", over);
       document.removeEventListener("pointerleave", leaveWindow);
       document.removeEventListener("pointerenter", enterWindow);
-      document.body.classList.remove(styles.cursorActive);
+      document.documentElement.classList.remove(ACTIVE_CLASS);
     };
   }, []);
 
   return (
-    <div className={styles.cursor} aria-hidden="true">
+    <div className={styles.cursor} data-custom-cursor aria-hidden="true">
       <div
         className={`${styles.dot} ${hovering ? styles.hovering : ""} ${label ? styles.labeled : ""} ${hidden ? styles.hidden : ""}`}
         ref={dotRef}

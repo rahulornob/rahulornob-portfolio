@@ -37,8 +37,15 @@ import type {
 } from "@/cms/types";
 import styles from "./admin.module.css";
 
+// Must match the labels in navigation.tsx's socialItems - the icon set
+// only covers these five platforms, so this list is fixed rather than a
+// free-form add/remove editor.
+const SOCIAL_PLATFORMS = ["X", "Dribbble", "LinkedIn", "Instagram", "Facebook"];
+
 const sections = [
   ["hero", "Hero"],
+  ["navigation", "Navigation"],
+  ["preloader", "Preloader"],
   ["about", "About"],
   ["projects", "Projects"],
   ["services", "Services"],
@@ -51,6 +58,8 @@ type Section = (typeof sections)[number][0];
 
 const sectionIconPaths: Record<Section, string[]> = {
   hero: ["M3 11.5 12 4l9-7 9 7v8a2 2 0 0 1-2 2h-4v-6H8v6H5a2 2 0 0 1-2-2z"],
+  navigation: ["M4 6h16", "M4 12h16", "M4 18h16"],
+  preloader: ["M12 3v4", "M12 17v4", "M3 12h4", "M17 12h4", "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"],
   about: ["M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z", "M4 21a8 8 0 0 1 16 0"],
   projects: ["M4 4h6v6H4z", "M14 4h6v6h-6z", "M4 14h6v6H4z", "M14 14h6v6h-6z"],
   services: ["m14.7 6.3 3-3 3 3-3 3", "M16 8 8 16", "m6.5 13.5-4-4 3-3 4 4", "m10 14 4 4"],
@@ -602,6 +611,8 @@ export function AdminEditor({
   }
 
   const hero = content.hero || {};
+  const navigation = content.navigation || {};
+  const preloader = content.preloader || {};
   const about = content.about || {};
   const services = content.servicesSection || {};
   const testimonials = content.testimonialsSection || {};
@@ -660,10 +671,61 @@ export function AdminEditor({
 
           {active === "hero" ? (
             <SectionPanel title="Hero" description="The first screen people see.">
-              <Field label="Headline"><TextInput multiline value={hero.headline} onChange={(headline) => setContent((current) => ({ ...current, hero: { ...current.hero, headline } }))} /></Field>
-              <Field label="Intro"><TextInput multiline value={hero.intro} onChange={(intro) => setContent((current) => ({ ...current, hero: { ...current.hero, intro } }))} /></Field>
-              <Field label="Button label"><TextInput value={hero.ctaLabel} onChange={(ctaLabel) => setContent((current) => ({ ...current, hero: { ...current.hero, ctaLabel } }))} /></Field>
-              <ImageList single label="Background image" images={hero.backgroundImage ? [hero.backgroundImage] : []} onChange={(images) => setContent((current) => ({ ...current, hero: { ...current.hero, backgroundImage: images[0] } }))} />
+              <Field label="Name"><TextInput value={hero.name} onChange={(name) => setContent((current) => ({ ...current, hero: { ...current.hero, name } }))} /></Field>
+              <Field label="Title"><TextInput value={hero.title} onChange={(title) => setContent((current) => ({ ...current, hero: { ...current.hero, title } }))} /></Field>
+              <Field label="Bio" hint="Separate paragraphs with a blank line.">
+                <TextInput
+                  multiline
+                  value={(hero.bio || []).join("\n\n")}
+                  onChange={(value) =>
+                    setContent((current) => ({
+                      ...current,
+                      hero: {
+                        ...current.hero,
+                        bio: value
+                          .split(/\n\s*\n/)
+                          .map((paragraph) => paragraph.trim())
+                          .filter(Boolean),
+                      },
+                    }))
+                  }
+                />
+              </Field>
+              <Field label="Contact nudge" hint="Small label above the talk link, e.g. 'Want me on your team?'"><TextInput value={hero.wantLabel} onChange={(wantLabel) => setContent((current) => ({ ...current, hero: { ...current.hero, wantLabel } }))} /></Field>
+              <Field label="Talk link label"><TextInput value={hero.ctaLabel} onChange={(ctaLabel) => setContent((current) => ({ ...current, hero: { ...current.hero, ctaLabel } }))} /></Field>
+              <ImageList single label="Portrait" images={hero.avatar ? [hero.avatar] : []} onChange={(images) => setContent((current) => ({ ...current, hero: { ...current.hero, avatar: images[0] } }))} />
+            </SectionPanel>
+          ) : null}
+
+          {active === "navigation" ? (
+            <SectionPanel title="Navigation" description="The menu inside the nav pill. Leave a link's URL blank to show it dimmed and unclickable, e.g. for a 'coming soon' item. Use mailto:you@email.com to open the visitor's email app instead of jumping to a section.">
+              <LinkEditor title="Menu links" items={navigation.items || []} onChange={(items) => setContent((current) => ({ ...current, navigation: { ...current.navigation, items } }))} />
+              <div className={styles.fieldLabel}>Social icons</div>
+              {SOCIAL_PLATFORMS.map((platform) => (
+                <Field label={platform} key={platform}>
+                  <TextInput
+                    placeholder="https://…"
+                    value={navigation.socials?.find((social) => social.label === platform)?.url}
+                    onChange={(url) =>
+                      setContent((current) => {
+                        const others = (current.navigation?.socials || []).filter(
+                          (social) => social.label !== platform,
+                        );
+                        const socials = url ? [...others, { label: platform, url }] : others;
+                        return { ...current, navigation: { ...current.navigation, socials } };
+                      })
+                    }
+                  />
+                </Field>
+              ))}
+            </SectionPanel>
+          ) : null}
+
+          {active === "preloader" ? (
+            <SectionPanel title="Preloader" description="The loading animation shown before the site appears.">
+              <Field label="Left label"><TextInput value={preloader.leftLabel} onChange={(leftLabel) => setContent((current) => ({ ...current, preloader: { ...current.preloader, leftLabel } }))} /></Field>
+              <Field label="Right label"><TextInput value={preloader.rightLabel} onChange={(rightLabel) => setContent((current) => ({ ...current, preloader: { ...current.preloader, rightLabel } }))} /></Field>
+              <ImageList label="Reel images" images={preloader.images} onChange={(images) => setContent((current) => ({ ...current, preloader: { ...current.preloader, images } }))} />
             </SectionPanel>
           ) : null}
 
@@ -752,25 +814,21 @@ export function AdminEditor({
           ) : null}
 
           {active === "testimonials" ? (
-            <SectionPanel title="Testimonials" description="Client quotes, people, and company details.">
+            <SectionPanel title="Testimonials" description="Client quotes and people.">
               <Field label="Heading"><TextInput value={testimonials.heading} onChange={(heading) => setContent((current) => ({ ...current, testimonialsSection: { ...current.testimonialsSection, heading } }))} /></Field>
               <SortableList ids={(testimonials.items || []).map((_, index) => `testimonial-${index}`)} onMove={(from, to) => setTestimonials(arrayMove(testimonials.items || [], from, to))}>
                 {(testimonials.items || []).map((item, index) => (
                 <SortableItemCard id={`testimonial-${index}`} index={index} label={item.author || "New testimonial"} onRemove={() => setTestimonials((testimonials.items || []).filter((_, itemIndex) => itemIndex !== index))} key={`testimonial-${index}`}>
                   <Field label="Quote"><TextInput multiline value={item.quote} onChange={(quote) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, quote }; setTestimonials(next); }} /></Field>
-                  <div className={styles.threeColumns}>
+                  <div className={styles.twoColumns}>
                     <Field label="Name"><TextInput value={item.author} onChange={(author) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, author }; setTestimonials(next); }} /></Field>
                     <Field label="Role"><TextInput value={item.role} onChange={(role) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, role }; setTestimonials(next); }} /></Field>
-                    <Field label="Company"><TextInput value={item.company} onChange={(company) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, company }; setTestimonials(next); }} /></Field>
                   </div>
-                  <div className={styles.twoColumns}>
-                    <ImageList single label="Portrait" images={item.portrait ? [item.portrait] : []} onChange={(images) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, portrait: images[0] }; setTestimonials(next); }} />
-                    <ImageList single label="Company logo" images={item.companyLogo ? [item.companyLogo] : []} onChange={(images) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, companyLogo: images[0] }; setTestimonials(next); }} />
-                  </div>
+                  <ImageList single label="Avatar" images={item.avatar ? [item.avatar] : []} onChange={(images) => { const next = [...(testimonials.items || [])]; next[index] = { ...item, avatar: images[0] }; setTestimonials(next); }} />
                 </SortableItemCard>
                 ))}
               </SortableList>
-              <button className={styles.addButton} type="button" onClick={() => setTestimonials([...(testimonials.items || []), { quote: "", author: "New testimonial", role: "", company: "" }])}>+ Add testimonial</button>
+              <button className={styles.addButton} type="button" onClick={() => setTestimonials([...(testimonials.items || []), { quote: "", author: "New testimonial", role: "" }])}>+ Add testimonial</button>
             </SectionPanel>
           ) : null}
 

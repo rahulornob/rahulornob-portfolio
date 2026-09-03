@@ -329,17 +329,19 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         onPointerCancel={finishDrag}
       >
         <div ref={dragCueRef} className={styles.dragCue} aria-hidden="true">
-          <span className={styles.dragArrow}>
-            <svg viewBox="0 0 12 12">
-              <path d="m7.5 2.5-3.5 3.5 3.5 3.5" />
-            </svg>
-          </span>
-          <span className={styles.dragLabel}>Drag</span>
-          <span className={styles.dragArrow}>
-            <svg viewBox="0 0 12 12">
-              <path d="m4.5 2.5 3.5 3.5-3.5 3.5" />
-            </svg>
-          </span>
+          <div className={styles.dragCueInner}>
+            <span className={styles.dragArrow}>
+              <svg viewBox="0 0 12 12">
+                <path d="m7.5 2.5-3.5 3.5 3.5 3.5" />
+              </svg>
+            </span>
+            <span className={styles.dragLabel}>Drag</span>
+            <span className={styles.dragArrow}>
+              <svg viewBox="0 0 12 12">
+                <path d="m4.5 2.5 3.5 3.5-3.5 3.5" />
+              </svg>
+            </span>
+          </div>
         </div>
 
         <div ref={trackRef} className={styles.thumbnailTrack} style={motionStyle}>
@@ -483,6 +485,7 @@ export function ProjectShowcase({
         <a
           className={`${styles.cta} type-button-semibold button-swoosh`}
           href="#contact"
+          data-cursor="Let's talk"
         >
           <ButtonSwooshContent text="Start project">
             <RevealHeading as="span" lines={["Start project"]} />

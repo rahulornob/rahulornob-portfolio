@@ -2,196 +2,391 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: 100vh;
-  height: 100svh;
-  align-items: flex-start;
-  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
   overflow: hidden;
-  padding: 200px;
+  padding: 192px 200px 48px;
   background: #ffffff;
   color: #111111;
 }
 
-.background {
-  z-index: 0;
-  object-fit: cover;
-  object-position: bottom;
+/*
+ * A wide, soft wash behind the whole lower third of the hero - not just
+ * the brand row's own local fades (.brandsFade*) below, which only
+ * guarantee the logos themselves stay legible. This one settles the
+ * dither trail back to plain white before it ever reaches that area, so
+ * the carousel sits on a calm backdrop rather than an active field.
+ */
+.bottomFade {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* Same level as the dither canvas (also 1) but declared later in the
+     markup, so it still paints over the trail to fade it out - it just
+     also needs to clear the brand row's new z-index (0) now that the
+     row sits behind the trail instead of clipping it. */
+  z-index: 1;
+  height: 200px;
   pointer-events: none;
-  user-select: none;
-  animation: hero-settle 1400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
 }
 
 .content {
   position: relative;
-  z-index: 1;
+  /* Above the dither trail (1) so the trail never draws over the
+     readable text/avatar - unlike the brand row below, which is now
+     deliberately behind the trail instead of clipping it. */
+  z-index: 2;
   display: flex;
-  width: 400px;
+  width: 600px;
+  max-width: 100%;
   flex-direction: column;
   align-items: flex-start;
-  gap: 64px;
-  margin-right: auto;
+  gap: 20px;
+}
+
+.avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex: none;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 900ms 100ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms 100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * The hero mounts (and would normally start animating in) while the
+ * preloader still fully covers it, so an autoplaying entrance finishes
+ * unseen behind that opaque panel and the reveal just uncovers a
+ * already-settled layout - no visible "appearing". Gating on this global
+ * marker - set once Preloader's own exit actually completes (see
+ * preloader.tsx's finish()) - means the same staggered arrival instead
+ * plays out as the wipe uncovers the page, so content visibly appears
+ * right as it's revealed instead of having arrived off-screen already.
+ */
+:global(.preloader-done) .avatar {
+  opacity: 1;
+  transform: none;
+}
+
+.avatarImageWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  /* Separate from .avatar's own transform (used once, for the entrance
+     reveal above) so this hover tilt gets its own quick, springy timing
+     instead of inheriting that slow 900ms arrival transition. */
+  transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.avatar:hover .avatarImageWrap {
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.avatarImage {
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.status {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 16px;
+  background: #16bf5e;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .copy {
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: 18px;
-  padding-right: 48px;
+  align-items: flex-start;
+  gap: 24px;
 }
 
-.copy h1,
-.copy p {
-  width: 352px;
+.identity {
+  display: flex;
+  width: 384px;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 900ms 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.preloader-done) .identity {
+  opacity: 1;
+  transform: none;
+}
+
+.identity h1 {
   margin: 0;
 }
 
-.copy h1 {
-  min-height: 159px;
-  animation: copy-arrive 900ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+.role {
+  margin: 0;
+  opacity: 0.5;
 }
 
-.copy p {
-  min-height: 72px;
-  opacity: 0.7;
-  animation: copy-arrive-muted 900ms 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+.bio {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 900ms 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.cta {
-  --button-base-color: #111111;
+:global(.preloader-done) .bio {
+  opacity: 1;
+  transform: none;
+}
 
+.bio p {
+  margin: 0;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 900ms 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.preloader-done) .contact {
+  opacity: 1;
+  transform: none;
+}
+
+.contactEyebrow {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.contactLink {
+  position: relative;
   display: inline-flex;
-  min-width: 120px;
-  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.16px;
+  text-transform: uppercase;
+  color: #111111;
+  white-space: nowrap;
+}
+
+.contactLink::after {
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contactLink:hover::after,
+.contactLink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.contactLink:focus-visible {
+  outline: none;
+}
+
+.brands {
+  position: relative;
+  /* Behind the dither trail (1) on purpose - clipping the trail at this
+     row's rectangular edge (it used to sit in front, opaque, to hide the
+     trail behind it) read as a hard, obviously-rectangular cut. Sitting
+     behind it instead means the trail draws straight through uninterrupted;
+     it occasionally passes over a logo, which is a fair trade for not
+     having a visible seam. */
+  z-index: 0;
+  width: 100%;
+  max-width: 1200px;
+  height: 72px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 900ms 540ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 900ms 540ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.preloader-done) .brands {
+  opacity: 1;
+  transform: none;
+}
+
+.brandsTrack {
+  display: flex;
+  width: max-content;
+  height: 72px;
+  animation: brands-marquee 32s linear infinite;
+  will-change: transform;
+}
+
+.brands:hover .brandsTrack {
+  animation-play-state: paused;
+}
+
+.brandsRow {
+  display: flex;
+  align-items: center;
+  height: 72px;
+  gap: 40px;
+  padding-right: 40px;
+}
+
+.brandLogo {
+  display: flex;
+  flex: none;
+  height: 72px;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: #ffffff;
-  white-space: nowrap;
-  transition:
-    background-color 180ms ease,
-    transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
-  animation: copy-arrive 900ms 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.cta:hover {
-  transform: translateY(-3px);
+.brandLogo img {
+  display: block;
+  flex: none;
+  max-width: none;
 }
 
-@keyframes hero-settle {
+.brandsFade {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 200px;
+  height: 72px;
+  pointer-events: none;
+}
+
+.brandsFadeLeft {
+  left: 0;
+  background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0));
+}
+
+.brandsFadeRight {
+  right: 0;
+  background: linear-gradient(270deg, #ffffff, rgba(255, 255, 255, 0));
+}
+
+@keyframes brands-marquee {
   from {
-    opacity: 0;
-    transform: scale(1.035);
+    transform: translateX(-50%);
   }
 
   to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes copy-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes copy-arrive-muted {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 0.7;
-    transform: none;
+    transform: translateX(0);
   }
 }
 
 @media (max-width: 1200px) {
   .hero {
-    padding: 180px 60px 80px;
+    padding: 160px 60px 48px;
+  }
+
+  .brands {
+    max-width: 100%;
+  }
+
+  .bottomFade {
+    height: 160px;
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 680px;
-    padding: 144px 32px 56px;
-  }
-
-  .background {
-    object-fit: cover;
-    object-position: 62% bottom;
+    min-height: auto;
+    gap: 48px;
+    padding: 144px 32px 40px;
   }
 
   .content {
-    width: min(400px, 68vw);
-    gap: 40px;
-  }
-
-  .copy {
-    padding-right: 0;
-  }
-
-  .copy h1,
-  .copy p {
     width: 100%;
   }
 
-  .copy h1,
-  .copy p {
-    min-height: 0;
+  .identity {
+    width: 100%;
+  }
+
+  .brandsFade {
+    width: 80px;
+  }
+
+  .bottomFade {
+    height: 120px;
   }
 }
 
 @media (max-width: 520px) {
   .hero {
-    min-height: 640px;
-    align-items: flex-end;
-    padding: 120px 20px 40px;
+    gap: 40px;
+    padding: 120px 20px 32px;
   }
 
-  .background {
-    object-position: 68% bottom;
+  .contactEyebrow {
+    white-space: normal;
   }
 
-  .content {
-    width: 100%;
-    gap: 28px;
+  .brandsFade {
+    width: 40px;
   }
 
-  .copy {
-    width: min(100%, 360px);
-    gap: 14px;
-  }
-
-  .copy h1 {
-    font-size: clamp(36px, 10.5vw, 44px);
-  }
-
-  .copy p {
-    max-width: 330px;
+  .bottomFade {
+    height: 90px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .background,
-  .copy h1,
-  .copy p,
-  .cta {
-    animation: none;
+  .avatar,
+  .avatarImageWrap,
+  .identity,
+  .bio,
+  .contact,
+  .brands,
+  .contactLink::after {
+    transition: none;
   }
 
-  .cta {
-    transition: none;
+  .brandsTrack {
+    animation: none;
   }
 }

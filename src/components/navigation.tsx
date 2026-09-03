@@ -4,14 +4,21 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import styles from "./navigation.module.css";
 
-const menuItems = [
+export type NavItem = { href?: string; label?: string };
+
+const defaultMenuItems: NavItem[] = [
   { label: "Work", href: "#work" },
   { label: "Services", href: "#services" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Approach", href: "#approach" },
-  { label: "Book a Call", href: "#contact" },
+  { label: "About (coming soon)", href: "" },
+  { label: "Playground", href: "#playground" },
+  { label: "Book a Call", href: "mailto:hey@rahulornob.com" },
 ];
 
+export type SocialLink = { label?: string; url?: string };
+
+// The icon set only covers these five platforms, so unlike the menu
+// links this list of labels is fixed - the CMS supplies a URL per
+// platform (matched by label below) rather than a free-form list.
 const socialItems = [
   { label: "X", icon: "/icons/nav-social-3.svg" },
   { label: "Dribbble", icon: "/icons/nav-social-4.svg" },
@@ -20,7 +27,14 @@ const socialItems = [
   { label: "Facebook", icon: "/icons/nav-social-2.svg" },
 ];
 
-export function Navigation() {
+export function Navigation({
+  items,
+  socials,
+}: {
+  items?: NavItem[];
+  socials?: SocialLink[];
+}) {
+  const menuItems = items?.length ? items : defaultMenuItems;
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
@@ -77,17 +91,32 @@ export function Navigation() {
           aria-hidden={!isOpen}
         >
           <div className={styles.menuLinks}>
-            {menuItems.map((item) => (
-              <a
-                className="type-heading-h4-medium"
-                href={item.href}
-                key={item.label}
-                tabIndex={isOpen ? 0 : -1}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {menuItems.map((item) =>
+              item.href ? (
+                <a
+                  className="type-heading-h4-medium"
+                  href={item.href}
+                  key={item.label}
+                  tabIndex={isOpen ? 0 : -1}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                // No URL set for this item (used for "coming soon" links,
+                // e.g. from the admin) - render inert instead of a dead #.
+                <a
+                  className="type-heading-h4-medium"
+                  href="#"
+                  aria-disabled="true"
+                  key={item.label}
+                  tabIndex={-1}
+                  onClick={(event) => event.preventDefault()}
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
           </div>
 
           <Image
@@ -99,12 +128,39 @@ export function Navigation() {
           />
 
           <div className={styles.socials} aria-label="Social links">
-            {socialItems.map((item) => (
-              <span className={styles.social} key={item.label} title={item.label}>
-                <Image src={item.icon} alt="" width={20} height={20} />
-                <span className={styles.visuallyHidden}>{item.label}</span>
-              </span>
-            ))}
+            {socialItems.map((item) => {
+              const url = socials?.find((social) => social.label === item.label)?.url;
+              const content = (
+                <>
+                  <Image src={item.icon} alt="" width={20} height={20} />
+                  <span className={styles.visuallyHidden}>{item.label}</span>
+                </>
+              );
+              return url ? (
+                <a
+                  className={styles.social}
+                  href={url}
+                  key={item.label}
+                  title={item.label}
+                  rel="noreferrer"
+                  target="_blank"
+                  tabIndex={isOpen ? 0 : -1}
+                >
+                  {content}
+                </a>
+              ) : (
+                // No URL set for this platform yet - render inert instead
+                // of a dead link, same treatment as an empty menu item.
+                <span
+                  className={styles.social}
+                  key={item.label}
+                  title={item.label}
+                  aria-hidden="true"
+                >
+                  {content}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>

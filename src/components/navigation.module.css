@@ -266,6 +266,15 @@
   outline: none;
 }
 
+.menuLinks a[aria-disabled="true"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.open .menuLinks a[aria-disabled="true"] {
+  opacity: 0.4;
+}
+
 .divider {
   display: block;
   width: 264px;

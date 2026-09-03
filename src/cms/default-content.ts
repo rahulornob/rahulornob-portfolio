@@ -2,15 +2,33 @@ import type { SiteContent } from "./types";
 
 export const defaultContent: SiteContent = {
   hero: {
-    headline: "Making the internet slightly less annoying.",
-    intro:
-      "Designing for the web, building when needed, and using AI to move faster without letting it make the creative decisions.",
-    ctaLabel: "Start project",
+    name: "Rahul Ornob",
+    title: "Design Engineer",
+    bio: [
+      "I’m a visual-first designer with 5+ years of experience across web, product, telecom, healthcare, finance, and social impact. I care about sharp interfaces, strong visual direction, and making digital work feel polished without making it harder to use.",
+      "I’ve spent the last few years moving between client work, internal teams, freelance projects, and building my own stuff, which is probably why I like staying close to both design and execution.",
+    ],
+    wantLabel: "Want me on your team?",
+    ctaLabel: "Let’s talk",
   },
   about: {
     eyebrow: "Why me",
     heading:
       "5+ years in, I’m faster at finding what matters, better at knowing what doesn’t, and still annoyingly picky about the details people actually notice.",
+  },
+  navigation: {
+    items: [
+      { label: "Work", href: "#work" },
+      { label: "Services", href: "#services" },
+      { label: "About (coming soon)", href: "" },
+      { label: "Playground (coming soon)", href: "" },
+      { label: "Book a Call", href: "mailto:hey@rahulornob.com" },
+    ],
+  },
+  preloader: {
+    leftLabel: "rahulornob",
+    rightLabel: "design engineer",
+    images: [],
   },
   projectsHeading: "A selection\nof things I’ve made",
   projectsCarouselSpeed: 60,
@@ -49,7 +67,6 @@ export const defaultContent: SiteContent = {
         "Collaborating with Better Mistakes was an absolute joy. They build fast without ever on quality and consistently.",
       author: "Nothing Rahman",
       role: "Product Manager, SaaS Platform",
-      company: "Cosmos",
     })),
   },
   faqSection: {

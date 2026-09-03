@@ -63,6 +63,8 @@ export default function ParticleText({
     };
 
     const update = () => {
+      let isMoving = pointer.active;
+
       for (const particle of particles) {
         if (pointer.active && !reducedMotion) {
           const dx = particle.x - pointer.x;
@@ -83,7 +85,18 @@ export default function ParticleText({
         particle.vy *= particle.friction;
         particle.x += particle.vx;
         particle.y += particle.vy;
+
+        if (
+          Math.abs(particle.vx) > 0.01 ||
+          Math.abs(particle.vy) > 0.01 ||
+          Math.abs(particle.originX - particle.x) > 0.05 ||
+          Math.abs(particle.originY - particle.y) > 0.05
+        ) {
+          isMoving = true;
+        }
       }
+
+      return isMoving;
     };
 
     const animate = () => {
@@ -93,9 +106,11 @@ export default function ParticleText({
         return;
       }
 
-      update();
+      const shouldContinue = update();
       draw();
-      animationFrame = window.requestAnimationFrame(animate);
+      animationFrame = shouldContinue
+        ? window.requestAnimationFrame(animate)
+        : null;
     };
 
     const startAnimation = () => {
@@ -188,10 +203,12 @@ export default function ParticleText({
       pointer.x = event.clientX - bounds.left;
       pointer.y = event.clientY - bounds.top;
       pointer.active = true;
+      startAnimation();
     };
 
     const handlePointerLeave = () => {
       pointer.active = false;
+      startAnimation();
     };
 
     const resizeObserver = new ResizeObserver(() => {
