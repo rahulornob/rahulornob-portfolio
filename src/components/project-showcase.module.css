@@ -21,7 +21,7 @@
   display: flex;
   width: 1200px;
   flex-direction: column;
-  gap: 80px;
+  gap: 180px;
 }
 
 .project {
@@ -60,25 +60,40 @@
   z-index: 9998;
   top: 0;
   left: 0;
+  margin-top: -24px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/*
+ * The opacity/scale show-hide animation lives on this inner element,
+ * separate from the outer .dragCue that the pointer-tracking transform
+ * is applied to. CSS's standalone `scale` property and the `transform`
+ * property share one transform-origin anchored to the element's static
+ * layout position (the viewport's top-left, since .dragCue is
+ * position: fixed) - scaling the same element JS also translates would
+ * make it visibly shrink toward/grow from that corner instead of the
+ * cursor. Keeping scale on a nested element whose origin is its own
+ * (cursor-centered) box avoids that.
+ */
+.dragCueInner {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: -24px;
   opacity: 0;
-  pointer-events: none;
   scale: 0;
   transition:
     opacity 600ms cubic-bezier(0.65, 0, 0, 1),
     scale 600ms cubic-bezier(0.65, 0, 0, 1);
-  will-change: transform, scale, opacity;
+  will-change: scale, opacity;
 }
 
-.gallery[data-cue-visible="true"] .dragCue {
+.gallery[data-cue-visible="true"] .dragCueInner {
   opacity: 1;
   scale: 1;
 }
 
-.gallery[data-dragging="true"] .dragCue {
+.gallery[data-dragging="true"] .dragCueInner {
   scale: 0.94;
 }
 
@@ -340,7 +355,7 @@
   }
 
   .projectList {
-    gap: 64px;
+    gap: 80px;
   }
 
   .project {
