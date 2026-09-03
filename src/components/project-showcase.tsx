@@ -312,6 +312,7 @@ function ProjectCard({ project, speed }: { project: Project; speed: number }) {
         className={styles.gallery}
         role="region"
         aria-label={`${project.title} image gallery. Drag left or right to browse.`}
+        data-cursor-hide
         onPointerEnter={(event) => {
           showDragCue(event.currentTarget, event.clientX, event.clientY);
           updateGallerySpeed(event.currentTarget, 0.5);

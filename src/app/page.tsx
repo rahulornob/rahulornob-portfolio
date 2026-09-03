@@ -6,6 +6,7 @@ import { Testimonials } from "@/components/testimonials";
 import { Faq } from "@/components/faq";
 import { SiteFooter } from "@/components/site-footer";
 import { Preloader } from "@/components/preloader";
+import { Cursor } from "@/components/cursor";
 import { getSiteContent } from "@/cms/storage";
 import styles from "./page.module.css";
 
@@ -24,6 +25,7 @@ export default async function Home() {
 
   return (
     <>
+      <Cursor />
       <Preloader items={preloaderItems} />
       <main className={styles.page}>
         <div className={styles.content}>

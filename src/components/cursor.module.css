@@ -1,0 +1,83 @@
+/*
+ * The dot's own position is driven purely by JS (transform, set every
+ * frame in cursor.tsx) - this file only owns its size/look and the
+ * transitions between states, so growing for a hover or a label never
+ * fights with the per-frame position update.
+ */
+.cursor {
+  pointer-events: none;
+}
+
+.dot {
+  position: fixed;
+  z-index: 100000;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 1;
+  /* Inverts against whatever is underneath, pixel for pixel - visible on
+     white, visible on black, and on colored/photo backgrounds without
+     needing every section to be manually tagged light or dark. */
+  mix-blend-mode: difference;
+  transition:
+    width 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    padding-inline 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 220ms ease;
+  will-change: transform;
+}
+
+/* +10% over the resting 10px - was 44px, which read as oversized. */
+.dot.hovering {
+  width: 11px;
+  height: 11px;
+}
+
+.dot.labeled {
+  width: auto;
+  height: 36px;
+  padding-inline: 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111111;
+  /* An opaque pill with text can't use difference blending - it'd read
+     as a broken color, not an inverted one - so it opts back out to a
+     plain solid instead. */
+  mix-blend-mode: normal;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.18);
+}
+
+.dot.hidden {
+  opacity: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/*
+ * Hides the real cursor everywhere while this one is active. This class is
+ * applied to <body> from cursor.tsx via styles.cursorActive (so the name
+ * below gets the same module hash there and here) - `!important` because
+ * plenty of elements on the page (buttons, links) carry their own
+ * `cursor: pointer` from the browser's UA stylesheet or component CSS,
+ * which would otherwise win over a plain inherited value here.
+ */
+.cursorActive,
+.cursorActive * {
+  cursor: none !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
