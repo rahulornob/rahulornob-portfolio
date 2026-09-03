@@ -9,14 +9,13 @@ export function SmoothScroll() {
       anchors: true,
       autoRaf: true,
       autoToggle: true,
-      duration: 0.95,
-      easing: (time) => 1 - Math.pow(1 - time, 4),
+      lerp: 0.14,
       overscroll: true,
       respectReducedMotion: true,
       smoothWheel: true,
       stopInertiaOnNavigate: true,
       syncTouch: false,
-      wheelMultiplier: 1.1,
+      wheelMultiplier: 1,
     });
 
     return () => lenis.destroy();
