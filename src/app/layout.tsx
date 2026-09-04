@@ -2,9 +2,24 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rahul Ornob — Product Designer",
+  metadataBase: new URL("https://rahulornob.com"),
+  title: "Rahul Ornob — Design Engineer",
   description:
-    "Designing for the web, building when needed, and using AI to move faster without letting it make the creative decisions.",
+    "Visual-first Design Engineer focused on websites, interfaces, and AI-assisted workflows that move ideas closer to something real.",
+  openGraph: {
+    title: "Rahul Ornob — Design Engineer",
+    description:
+      "Visual-first Design Engineer focused on websites, interfaces, and AI-assisted workflows that move ideas closer to something real.",
+    url: "https://rahulornob.com",
+    siteName: "Rahul Ornob",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rahul Ornob — Design Engineer",
+    description:
+      "Visual-first Design Engineer focused on websites, interfaces, and AI-assisted workflows that move ideas closer to something real.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

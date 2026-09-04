@@ -42,11 +42,35 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
   const scrollFrameRef = useRef<number | null>(null);
   const edgeResetTimerRef = useRef<number | null>(null);
   const edgeResetFrameRef = useRef<number | null>(null);
+  // True for the duration of any scroll *we* initiated (goToPosition's
+  // animated scrollTo, or jumpToPosition's instant edge-correction).
+  // handleScroll's live "which card is nearest" recompute fires on every
+  // scroll event, including the early frames of our own animations - where
+  // the viewport is still geometrically closer to the *departing* card -
+  // and was overwriting the position we'd just optimistically set, causing
+  // a visible flicker back to the previous card at the start of every
+  // transition. Gating that recompute while this is true (cleared by
+  // scrollend, with a timeout fallback in case that doesn't fire) leaves
+  // it live only for genuine user-driven scrolling (drag).
+  const programmaticScrollRef = useRef(false);
+  const programmaticScrollTimeoutRef = useRef<number | null>(null);
   const activePositionRef = useRef(initialPosition);
   const [activePosition, setActivePosition] = useState(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const activeSlide = slidePositions[activePosition];
+
+  const markProgrammaticScroll = useCallback(() => {
+    programmaticScrollRef.current = true;
+    if (programmaticScrollTimeoutRef.current !== null) {
+      window.clearTimeout(programmaticScrollTimeoutRef.current);
+    }
+    // Safety net in case scrollend doesn't fire for some reason - well
+    // past how long any of these scrollTo animations actually take.
+    programmaticScrollTimeoutRef.current = window.setTimeout(() => {
+      programmaticScrollRef.current = false;
+    }, 700);
+  }, []);
 
   const goToPosition = useCallback(
     (position: number, behavior: ScrollBehavior = "smooth") => {
@@ -58,6 +82,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
       const card = cardRefs.current[boundedPosition];
       if (!viewport || !card) return;
 
+      markProgrammaticScroll();
       viewport.scrollTo({
         left: card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2,
         behavior,
@@ -65,7 +90,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
       activePositionRef.current = boundedPosition;
       setActivePosition(boundedPosition);
     },
-    [totalPositions],
+    [totalPositions, markProgrammaticScroll],
   );
 
   const goToSlide = useCallback(
@@ -106,6 +131,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
       window.cancelAnimationFrame(edgeResetFrameRef.current);
     }
 
+    markProgrammaticScroll();
     viewport.dataset.resetting = "true";
     viewport.style.scrollSnapType = "none";
     viewport.scrollLeft =
@@ -120,7 +146,7 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
         edgeResetFrameRef.current = null;
       });
     });
-  }, []);
+  }, [markProgrammaticScroll]);
 
   const normalizeEdgePosition = useCallback(() => {
     const nearestPosition = findNearestPosition();
@@ -150,19 +176,31 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
     const centerCurrentSlide = () =>
       goToPosition(activePositionRef.current, "auto");
     const resizeObserver = new ResizeObserver(centerCurrentSlide);
+    // The reliable "this scroll gesture is actually done" signal - clears
+    // the programmatic-scroll gate so live drag tracking resumes. Support
+    // is Baseline as of 2024; the timeout in markProgrammaticScroll covers
+    // any browser where it doesn't fire.
+    const clearProgrammaticScroll = () => {
+      programmaticScrollRef.current = false;
+    };
 
     observer.observe(section);
     resizeObserver.observe(viewport);
+    viewport.addEventListener("scrollend", clearProgrammaticScroll);
     requestAnimationFrame(centerCurrentSlide);
 
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
+      viewport.removeEventListener("scrollend", clearProgrammaticScroll);
       if (edgeResetTimerRef.current !== null) {
         window.clearTimeout(edgeResetTimerRef.current);
       }
       if (edgeResetFrameRef.current !== null) {
         window.cancelAnimationFrame(edgeResetFrameRef.current);
+      }
+      if (programmaticScrollTimeoutRef.current !== null) {
+        window.clearTimeout(programmaticScrollTimeoutRef.current);
       }
     };
   }, [goToPosition]);
@@ -181,9 +219,13 @@ export function Testimonials({ content }: { content?: TestimonialsContent }) {
     if (scrollFrameRef.current !== null) return;
 
     scrollFrameRef.current = requestAnimationFrame(() => {
-      const nearestPosition = findNearestPosition();
-      activePositionRef.current = nearestPosition;
-      setActivePosition(nearestPosition);
+      // Skip the live recompute during our own in-flight animated scrolls -
+      // see the comment on programmaticScrollRef above.
+      if (!programmaticScrollRef.current) {
+        const nearestPosition = findNearestPosition();
+        activePositionRef.current = nearestPosition;
+        setActivePosition(nearestPosition);
+      }
       scrollFrameRef.current = null;
     });
 
