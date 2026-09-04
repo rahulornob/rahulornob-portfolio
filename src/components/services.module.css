@@ -51,7 +51,6 @@
   width: 1200px;
   flex-direction: column;
   gap: 0;
-  padding: 40px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0;
   transform: translateY(28px);
@@ -76,11 +75,16 @@
 .trigger {
   display: flex;
   width: 100%;
-  height: 40px;
   flex: none;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  /* Was height: 40px + padding: 0, with the visual top/bottom breathing
+     room coming from .service's own padding instead - meaning the button
+     (the actual click target) only ever covered the text's own line
+     height, and clicking the gap above/below it (which reads as part of
+     the same row) did nothing. Padding directly on the button makes that
+     whole space clickable. */
+  padding: 40px 0;
   cursor: pointer;
   background: transparent;
   color: #ffffff;
@@ -154,6 +158,11 @@
 .panelInner {
   min-height: 0;
   overflow: hidden;
+  /* Replaces the bottom half of .service's old padding: 40px 0 - the top
+     half now lives on .trigger itself (see its comment). This side stays
+     on the panel since it only needs to exist when open; overflow:hidden
+     above keeps it invisible while the grid row is collapsed to 0fr. */
+  padding-bottom: 40px;
 }
 
 .details {
@@ -362,14 +371,14 @@
     padding: 72px 20px;
   }
 
-  .service {
+  .trigger {
+    min-height: 40px;
+    gap: 20px;
     padding: 28px 0;
   }
 
-  .trigger {
-    height: auto;
-    min-height: 40px;
-    gap: 20px;
+  .panelInner {
+    padding-bottom: 28px;
   }
 
   .trigger > span:first-child {
